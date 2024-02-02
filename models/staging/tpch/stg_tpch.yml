@@ -1,14 +1,17 @@
 version: 2
 
+required_tests: 
+  tests: &required_pk_tests
+    - not_null
+    - unique    
+
 models:
   - name: stg_tpch_customers
     description: staging layer for customers data
     columns:
       - name: customer_key
         description: primary key of the model
-        tests:
-          - unique
-          - not_null
+        tests: *required_pk_tests
       - name: name
         description: customer id
       - name: address
@@ -29,9 +32,7 @@ models:
     columns:
       - name: order_item_key
         description: '{{ doc("order_item_key") }}'
-        tests:
-          - unique
-          - not_null
+        tests: *required_pk_tests
       - name: order_key
         description: foreign key to stg_tpch_orders
       - name: part_key
@@ -70,9 +71,7 @@ models:
     columns:
       - name: nation_key
         description: primary key of the model
-        tests:
-          - unique
-          - not_null
+        tests: *required_pk_tests
       - name: name
         description: nation name
       - name: region_key
@@ -85,9 +84,7 @@ models:
     columns:
       - name: order_key
         description: primary key of the model
-        tests:
-          - unique
-          - not_null
+        tests: *required_pk_tests
       - name: customer_key
         description: foreign key to stg_tpch_customers
       - name: status_code
@@ -110,9 +107,7 @@ models:
     columns:
       - name: part_supplier_key
         description: surrogate key for the model -- combo of ps_partkey + ps_suppkey
-        tests:
-          - unique
-          - not_null
+        tests: *required_pk_tests
       - name: part_key
         description: foreign key to stg_tpch_parts
       - name: supplier_key
@@ -129,9 +124,7 @@ models:
     columns:
       - name: part_key
         description: primary key of the model
-        tests:
-          - unique
-          - not_null
+        tests: *required_pk_tests
       - name: name
         description: name of the part
       - name: manufacturer
@@ -154,9 +147,7 @@ models:
     columns:
       - name: region_key
         description: primary key of the model
-        tests:
-          - unique
-          - not_null
+        tests: *required_pk_tests
       - name: name
         description: region name
       - name: comment
@@ -167,9 +158,7 @@ models:
     columns:
       - name: supplier_key
         description: primary key of the model
-        tests:
-          - unique
-          - not_null
+        tests: *required_pk_tests
       - name: supplier_name
         description: '{{ doc("supplier_name") }}'
       - name: supplier_address

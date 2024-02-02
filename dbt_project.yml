@@ -20,8 +20,6 @@ seed-paths: ["data"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
 
-
-
 target-path: "target"  # directory which will store compiled SQL files
 clean-targets:         # directories to be removed by `dbt clean`
     - "target"
@@ -47,10 +45,12 @@ vars:
 models:
   +grants:
     select: ['transformer']
-
   tpch:
+    +required_docs: true
     staging:
       +materialized: view
+      tpch:
+        +required_tests: {"unique.*|not_null": 1}
 
     marts:
       core:
