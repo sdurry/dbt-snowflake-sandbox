@@ -150,7 +150,7 @@ models:
         description: status of the order
         tests:
           - accepted_values:
-              values: ['F','O']
+              values: ['F','O','P']
               severity: warn
       - name: priority_code
         description: code associated with the order
