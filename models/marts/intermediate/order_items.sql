@@ -29,7 +29,7 @@ select
     line_item.commit_date,
     line_item.receipt_date,
     line_item.ship_mode,
-    line_item.extended_price as actual_price,
+    line_item.extended_price,
     line_item.quantity,
     
     -- extended_price is actually the line item total,
@@ -48,7 +48,7 @@ select
         gross_item_sales_amount + 
         item_discount_amount + 
         item_tax_amount
-    ){{ money() }} as net_item_sales_amount
+    ){{ money() }} as net_item_sales_amount_in_eur
 
 from
     orders
