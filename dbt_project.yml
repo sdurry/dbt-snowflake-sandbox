@@ -20,8 +20,6 @@ seed-paths: ["data"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
 
-
-
 target-path: "target"  # directory which will store compiled SQL files
 clean-targets:         # directories to be removed by `dbt clean`
     - "target"
@@ -30,6 +28,7 @@ clean-targets:         # directories to be removed by `dbt clean`
 on-run-start:
   - "alter warehouse transforming set warehouse_size=small;"
   - '{{create_udfs()}}' # comment / uncomment this line to build UDFs called in the create_udfs macro
+  - "{{ dbt_snow_mask.create_masking_policy('models')}}"
 
 on-run-end:
   - "alter warehouse transforming set warehouse_size=xsmall;"
@@ -40,15 +39,21 @@ vars:
   test: 'false' # to trigger runs for unit testing - override in a CLI param in testing job
   fct_order_items: 'mock_source__fct_order_items' # this is a map for unit testing
   dbt_metrics_calendar_model: all_days
+  use_force_applying_masking_policy: "True" # dbt snow mask
 
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
 
 models:
+  +copy_grants: true
+  +persist_docs:
+    relation: true
+    columns: true
   +grants:
     select: ['transformer']
 
   tpch:
+    +query_tag: clinicaltrial-#1232aa213
     staging:
       +materialized: view
 
