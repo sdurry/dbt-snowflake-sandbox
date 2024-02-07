@@ -48,7 +48,7 @@ select
         gross_item_sales_amount + 
         item_discount_amount + 
         item_tax_amount
-    ){{ money() }} as net_item_sales_amount
+    ){{ money() }} as net_item_sales_amount_in_eur
 
 from
     orders
