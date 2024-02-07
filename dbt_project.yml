@@ -61,9 +61,9 @@ models:
       core:
         materialized: table
 
-# snapshots:
-#   tpch:
-#     +target_schema: "{% if target.name == 'prod' %}snaps{% else %}{{ target.schema }}{% endif %}"
+snapshots:
+  tpch:
+    +target_schema: "{% if target.name == 'prod' %}snaps{% else %}{{ target.schema }}{% endif %}"
 
 seeds:
   tpch:
