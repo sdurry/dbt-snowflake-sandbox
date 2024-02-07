@@ -20,8 +20,6 @@ seed-paths: ["data"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
 
-
-
 target-path: "target"  # directory which will store compiled SQL files
 clean-targets:         # directories to be removed by `dbt clean`
     - "target"
@@ -45,10 +43,15 @@ vars:
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
 
 models:
+  +copy_grants: true
+  +persist_docs:
+    relation: true
+    columns: true
   +grants:
     select: ['transformer']
 
   tpch:
+    +query_tag: clinicaltrial-#1232aa213
     staging:
       +materialized: view
 
