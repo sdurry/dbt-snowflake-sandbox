@@ -56,6 +56,7 @@ models:
       core:
         materialized: table
 
+# https://docs.getdbt.com/reference/resource-configs/target_schema#use-a-target-aware-schema
 # snapshots:
 #   tpch:
 #     +target_schema: "{% if target.name == 'prod' %}snaps{% else %}{{ target.schema }}{% endif %}"
