@@ -35,6 +35,7 @@ on-run-end:
   - "{{ grant_all_on_schemas(schemas, 'transformer') }}"
 
 vars:
+  start_date: '1999-01-01'
   use_force_applying_masking_policy: "True" # dbt snow mask
 
 # Configuring models
