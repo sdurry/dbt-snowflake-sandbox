@@ -1,0 +1,10 @@
+packages:
+- package: dbt-labs/codegen
+  version: 0.12.1
+- package: dbt-labs/dbt_utils
+  version: 1.1.1
+- package: tnightengale/dbt_meta_testing
+  version: 0.3.6
+- package: entechlog/dbt_snow_mask
+  version: 0.2.5
+sha1_hash: bd400d4dce7d59eda4cf7f6e5a76afe7f3a3408b
