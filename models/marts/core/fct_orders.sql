@@ -1,7 +1,8 @@
 {{
     config(
         materialized = 'table',
-        tags=['finance']
+        tags=["clinicaltrial-ABC"],
+        query_tag = 'clinicaltrial-ABC'
     )
 }}
 

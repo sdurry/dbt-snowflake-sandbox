@@ -1,8 +1,0 @@
-packages:
-- package: dbt-labs/codegen
-  version: 0.12.1
-- package: dbt-labs/dbt_utils
-  version: 1.1.1
-- package: tnightengale/dbt_meta_testing
-  version: 0.3.6
-sha1_hash: 397b038da7f7fea0245971a48b56f3c1c72e645a
