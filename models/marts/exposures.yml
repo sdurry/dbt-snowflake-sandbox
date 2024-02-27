@@ -29,4 +29,4 @@ exposures:
     
     # IMPORTANT: determines the lineage relationship of the exposure construct to the rest of your DAG
     depends_on:
-      - ref('agg_ship_modes_dynamic_pivot')
+      - ref('fct_orders')

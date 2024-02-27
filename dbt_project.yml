@@ -35,10 +35,6 @@ on-run-end:
   - "{{ grant_all_on_schemas(schemas, 'transformer') }}"
 
 vars:
-  start_date: '1999-01-01'
-  test: 'false' # to trigger runs for unit testing - override in a CLI param in testing job
-  fct_order_items: 'mock_source__fct_order_items' # this is a map for unit testing
-  dbt_metrics_calendar_model: all_days
   use_force_applying_masking_policy: "True" # dbt snow mask
 
 # Configuring models
@@ -60,6 +56,7 @@ models:
         +required_tests: {"unique.*|not_null": 1}
 
     marts:
+      +required_tests: {"unique.*|not_null|relationship": 2}
       core:
         materialized: table
 
