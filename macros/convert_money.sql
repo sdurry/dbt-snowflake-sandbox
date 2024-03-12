@@ -1,5 +1,5 @@
 {% macro money(col) -%}
-::decimal(16,2)
+::decimal(4,0)
 {%- endmacro %}
 
 
