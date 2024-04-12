@@ -2,6 +2,9 @@ version: 2
 
 models:
   - name: dim_customers
+    tests:
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('stg_tpch_customer')
     description: Customer dimensions table
     columns:
       - name: customer_key
