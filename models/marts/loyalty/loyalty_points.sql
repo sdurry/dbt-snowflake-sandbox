@@ -30,7 +30,7 @@ with cust as (
 
 , business_logic as (
 select 
-    customer_key::varchar as customer_key
+    customer_key as customer_key
     , case when total_price_usd >= 3500000 then 'gold'
        when total_price_usd between 2000000 and 3499999 then 'silver'
        else 'bronze_level'
