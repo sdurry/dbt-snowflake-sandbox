@@ -40,15 +40,16 @@ vars:
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
 
-models:
-  
+models:  
+  ## dbt meta testing
+  +required_docs: true
+
+  ## Snowflake specifics
+  +automatic_clustering: true
+  +query_tag: stephan-sandbox
   +persist_docs:
     relation: true
     columns: true
-  +required_docs: true
-  +query_tag: stephan-sandbox
-  
-
   +copy_grants: true
   +grants:
     select: ['transformer']
