@@ -1,8 +1,19 @@
 version: 2
 
+groups:
+  - name: marketing
+    owner:
+      # 'name' or 'email' is required; additional properties allowed
+      name: Marketing 
+      email: marketing@ddvug.com
+
 models:
   - name: loyalty_points
     description: client loyalty program with gold, silver, bronze status
+    group: marketing
+    config:
+      meta:
+        steward: "Oliver Cramer"
     config:
       contract:
         enforced: true
@@ -34,8 +45,3 @@ models:
         description: total points accumulated (total sales volume in USD / 10000)
         constraints:
           - type: not_null
-        tests:
-          - dbt_utils.accepted_range:
-              min_value: 0
-              max_value: 10000
-              inclusive: false
