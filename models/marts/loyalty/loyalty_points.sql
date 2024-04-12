@@ -19,24 +19,23 @@ with cust as (
 
 , cust_ord as ( 
 
-    select c.customer_key, c.nation, sum(net_item_sales_amount) as total_price_usd 
+    select c.customer_key, sum(net_item_sales_amount) as total_price_usd 
             from ord o 
             inner join cust c 
             on o.customer_key = c.customer_key
             where true 
-            group by 1,2
+            group by 1
 
 )
 
 , business_logic as (
 select 
-    customer_key::varchar as customer_key
-    , nation
+    customer_key as customer_key
     , case when total_price_usd >= 3500000 then 'gold'
        when total_price_usd between 2000000 and 3499999 then 'silver'
-       else 'bronze_level'
+       else 'bronze'
     end as medallion_level
-    --,round(total_price_usd / 10000) as points_amount
+    ,round(total_price_usd / 10000) as points_amount
    from cust_ord
 
 )
