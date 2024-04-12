@@ -3,7 +3,7 @@
         config(
             unique_key='customer_key',
             strategy='timestamp',
-            updated_at='last_updated_at'
+            updated_at='__load_date'
         )
     }}
 

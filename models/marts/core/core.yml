@@ -47,7 +47,7 @@ models:
       - name: market_segment
         data_type: varchar(10)
         description: market segment of the customer
-      - name: __load_date
+      - name: last_updated_at
         description: system timestamp of data loading
         data_type: timestamp
 

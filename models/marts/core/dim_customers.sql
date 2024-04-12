@@ -30,7 +30,7 @@ final as (
         customer.phone_number,
         customer.account_balance,
         customer.market_segment,
-        sysdate() as __load_date
+        sysdate() as last_updated_at
     from
         customer
         inner join nation
