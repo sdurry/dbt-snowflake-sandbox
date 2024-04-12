@@ -18,7 +18,7 @@ unit_tests:
           - {order_key: 4}
     expect: # the expected output given the inputs above
       rows:
-        - {extended_price: 10000,     base_price: 10000}
+        - {extended_price: 10000,     base_price: 10000.00}
         - {extended_price: 25,     base_price: null}
-        - {extended_price: 12345,     base_price: 494}
-        - {extended_price: 52312,     base_price: -52312}
+        - {extended_price: 12345,     base_price: 493.80}
+        - {extended_price: 52312,     base_price: -52312.00}
