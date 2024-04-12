@@ -22,7 +22,7 @@ models:
         constraints:
           - type: not_null
       - name: medallion_level
-        data_type: varchar
+        data_type: varchar(10)
         description: 'loyalty tier: bronze, silver, or gold'
         constraints:
           - type: not_null
