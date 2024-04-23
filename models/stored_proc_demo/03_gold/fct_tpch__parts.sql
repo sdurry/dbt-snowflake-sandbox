@@ -1,4 +1,8 @@
--- How do we define a create table?
+{{
+    config(
+        materialized='table'
+    )
+}}
 
 select
     suppliers.s_suppkey as supplier_id,
@@ -26,6 +30,6 @@ select
     end as part_material,
     parts.p_comment as part_comment
 from
-    SNOWFLAKE_SAMPLE_DATA.TPCH_SF1.SUPPLIER suppliers
-    left join SNOWFLAKE_SAMPLE_DATA.TPCH_SF1.PARTSUPP part_suppliers on suppliers.s_suppkey = part_suppliers.ps_suppkey
-    left join SNOWFLAKE_SAMPLE_DATA.TPCH_SF1.PART parts on parts.p_partkey = part_suppliers.ps_partkey
+    {{ ref('stg_tpch__suppliers') }} suppliers
+    left join {{ ref('stg_tpch__part_suppliers') }} part_suppliers on suppliers.s_suppkey = part_suppliers.ps_suppkey
+    left join {{ ref('stg_tpch__parts') }} parts on parts.p_partkey = part_suppliers.ps_partkey
