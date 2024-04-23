@@ -1,3 +1,5 @@
+--- 1 < create or replace table >
+
 create
 or replace table fct_tpch_parts(
     supplier_id string,
@@ -23,6 +25,8 @@ or replace table fct_tpch_parts(
     part_comment string,
     lowest_part_cost_in_region float
 );
+
+--- 2 < insert into table >
 insert into
     fct_tpch_parts (
         supplier_id,
@@ -73,10 +77,15 @@ select
     end as part_material,
     parts.p_comment as part_comment
 from
+
+--- from these 3 tables that I manage in a different stored proc
+
     SNOWFLAKE_SAMPLE_DATA.TPCH_SF1.SUPPLIER suppliers
     left join SNOWFLAKE_SAMPLE_DATA.TPCH_SF1.PARTSUPP part_suppliers on suppliers.s_suppkey = part_suppliers.ps_suppkey
     left join SNOWFLAKE_SAMPLE_DATA.TPCH_SF1.PART parts on parts.p_partkey = part_suppliers.ps_partkey
 
+
+-- 3 < alter table add > 
 
 ALTER TABLE
     fct_tpch_parts
@@ -86,6 +95,8 @@ ALTER TABLE
     fct_tpch_parts
 ADD
     nation string;
+
+-- 4 < update table where >
 UPDATE
     fct_tpch_parts
 SET
@@ -125,18 +136,25 @@ FROM
 WHERE
     fct_tpch_parts.part_id = min_parts.part_id;
 
+
+-- < delete from table where >
 DELETE FROM
     fct_tpch_parts
 WHERE
     part_material not ilike '%brass%';
 
+
+-- < create or replace validation table > 
 create or replace table fct_tpch_parts_log(part_id string, supplier_is_null string);
 
+-- < insert into validation table > 
 insert into fct_tpch_parts_log (
     part_id, supplier_is_null)
 select part_id,'YES' as supplier_is_null from fct_tpch_parts where supplier_id is null 
 union all 
 select '00000' as part_id, 'YES' as supplier_is_null;
+
+-- < delete from table where validation fails > 
 
 DELETE FROM
     fct_tpch_parts
