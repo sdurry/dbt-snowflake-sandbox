@@ -55,6 +55,9 @@ models:
     select: ['transformer']
 
   stephans_snow_sandbox:
+    stored_proc_demo:
+      +materialized: view
+
     staging:
       # The +required_tests config must be None or a dict with str keys and int values. YAML dictionaries are accepted.
       +required_tests: {"unique.*|not_null": 1}
