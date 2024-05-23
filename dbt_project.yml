@@ -23,7 +23,6 @@ clean-targets:         # directories to be removed by `dbt clean`
 on-run-start:
   - "alter warehouse transforming set warehouse_size=small;"
   - '{{create_udfs()}}' # comment / uncomment this line to build UDFs called in the create_udfs macro
-  - "{{ dbt_snow_mask.create_masking_policy('models')}}"
 
 on-run-end:
   - "alter warehouse transforming set warehouse_size=xsmall;"
@@ -80,7 +79,7 @@ snapshots:
     +target_schema: "{% if target.name == 'prod' %}snaps{% else %}{{ target.schema }}{% endif %}"
 
 seeds:
-  tpch:
+  stephans_snow_sandbox:
     snowflake_contract_rates:
       +column_types:
         effective_date: DATE
