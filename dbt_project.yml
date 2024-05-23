@@ -23,7 +23,6 @@ clean-targets:         # directories to be removed by `dbt clean`
 on-run-start:
   - "alter warehouse transforming set warehouse_size=small;"
   - '{{create_udfs()}}' # comment / uncomment this line to build UDFs called in the create_udfs macro
-  - "{{ dbt_snow_mask.create_masking_policy('models')}}"
 
 on-run-end:
   - "alter warehouse transforming set warehouse_size=xsmall;"
@@ -34,15 +33,14 @@ vars:
   test: 'false' # to trigger runs for unit testing - override in a CLI param in testing job
   fct_order_items: 'mock_source__fct_order_items' # this is a map for unit testing
   dbt_metrics_calendar_model: all_days
-  
-  use_force_applying_masking_policy: "True" # dbt snow mask
+
 
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
 
 models:  
   ## dbt meta testing
-  +required_docs: true
+  ## +required_docs: true
 
   ## Snowflake specifics
   +automatic_clustering: true
@@ -55,9 +53,6 @@ models:
     select: ['transformer']
 
   stephans_snow_sandbox:
-    stored_proc_demo:
-      +materialized: view
-
     staging:
       # The +required_tests config must be None or a dict with str keys and int values. YAML dictionaries are accepted.
       +required_tests: {"unique.*|not_null": 1}
@@ -80,7 +75,7 @@ snapshots:
     +target_schema: "{% if target.name == 'prod' %}snaps{% else %}{{ target.schema }}{% endif %}"
 
 seeds:
-  tpch:
+  stephans_snow_sandbox:
     snowflake_contract_rates:
       +column_types:
         effective_date: DATE
