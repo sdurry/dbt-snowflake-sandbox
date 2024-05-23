@@ -1,9 +1,0 @@
-models:
-  - name: fct_tpch__parts
-    description: fact model for tpch parts
-    columns:
-      - name: supplier_id
-        tests: 
-          - not_null:
-              config:
-                store_failures: true
