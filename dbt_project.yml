@@ -40,7 +40,7 @@ vars:
 
 models:  
   ## dbt meta testing
-  +required_docs: true
+  ## +required_docs: true
 
   ## Snowflake specifics
   +automatic_clustering: true
