@@ -6,7 +6,7 @@ models:
     columns:
       - name: customer_key
         description: primary key of the model
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: name
@@ -29,7 +29,7 @@ models:
     columns:
       - name: order_item_key
         description: '{{ doc("order_item_key") }}'
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: order_key
@@ -70,7 +70,7 @@ models:
     columns:
       - name: nation_key
         description: primary key of the model
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: name
@@ -85,7 +85,7 @@ models:
     columns:
       - name: order_key
         description: primary key of the model
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: customer_key
@@ -110,7 +110,7 @@ models:
     columns:
       - name: part_supplier_key
         description: surrogate key for the model -- combo of ps_partkey + ps_suppkey
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: part_key
@@ -129,7 +129,7 @@ models:
     columns:
       - name: part_key
         description: primary key of the model
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: name
@@ -154,7 +154,7 @@ models:
     columns:
       - name: region_key
         description: primary key of the model
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: name
@@ -167,7 +167,7 @@ models:
     columns:
       - name: supplier_key
         description: primary key of the model
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: supplier_name

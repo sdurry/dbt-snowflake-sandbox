@@ -17,13 +17,13 @@ sources:
         columns:
           - name: o_orderkey
             description: SF*1,500,000 are sparsely populated
-            tests: 
+            data_tests: 
               - unique
               - not_null
                   
           - name: o_custkey
             description: Foreign Key to C_CUSTKEY
-            tests:
+            data_tests:
               - relationships:
                   to: source('tpch', 'customer')
                   field: c_custkey
@@ -47,7 +47,7 @@ sources:
         columns:
           - name: c_custkey
             description: unique customer key
-            tests:
+            data_tests:
               - unique:
                   severity: warn
               - not_null:
@@ -72,19 +72,19 @@ sources:
         columns:
           - name: l_orderkey
             description: Foreign Key to O_ORDERKEY
-            tests:
+            data_tests:
               - relationships:
                   to: source('tpch', 'orders')
                   field: o_orderkey
           - name: l_partkey
             description:  Foreign key to P_PARTKEY, first part of the compound Foreign Key to (PS_PARTKEY,PS_SUPPKEY) with L_SUPPKEY
-            tests:
+            data_tests:
               - relationships:
                   to: source('tpch', 'part')
                   field: p_partkey
           - name: l_suppkey
             description: Foreign key to S_SUPPKEY, second part of the compound Foreign Key to (PS_PARTKEY, PS_SUPPKEY) with L_PARTKEY
-            tests:
+            data_tests:
               - relationships:
                   to: source('tpch', 'supplier')
                   field: s_suppkey
@@ -120,7 +120,7 @@ sources:
         columns:
           - name: n_nationkey
             description: 25 nations are populated
-            tests:
+            data_tests:
               - unique:
                   severity: warn
               - not_null:
@@ -129,7 +129,7 @@ sources:
             description: nation name
           - name: n_regionkey
             description: Foreign Key to R_REGIONKEY
-            tests:
+            data_tests:
               - relationships:
                   to: source('tpch', 'region')
                   field: r_regionkey
@@ -141,7 +141,7 @@ sources:
         columns:
           - name: p_partkey
             description: SF*200,000 are populated
-            tests:
+            data_tests:
               - unique:
                   severity: warn
               - not_null:
@@ -168,13 +168,13 @@ sources:
         columns:
           - name: ps_partkey
             description: Foreign Key to P_PARTKEY
-            tests:
+            data_tests:
               - relationships:
                   to: source('tpch', 'part')
                   field: p_partkey
           - name: ps_suppkey
             description: Foreign Key to S_SUPPKEY
-            tests:
+            data_tests:
               - relationships:
                   to: source('tpch', 'supplier')
                   field: s_suppkey
@@ -190,7 +190,7 @@ sources:
         columns:
           - name: r_regionkey
             description: 5 regions are populated
-            tests:
+            data_tests:
               - unique:
                   severity: warn
               - not_null:
@@ -205,7 +205,7 @@ sources:
         columns:
           - name: s_suppkey
             description: SF*10,000 are populated
-            tests:
+            data_tests:
               - unique:
                   severity: warn
               - not_null:
@@ -216,7 +216,7 @@ sources:
             description: address of the supplier
           - name: s_nationkey
             description: Foreign Key to N_NATIONKEY
-            tests:
+            data_tests:
               - relationships:
                   to: source('tpch', 'nation')
                   field: n_nationkey
