@@ -14,13 +14,13 @@ models:
       - name: customer_key
         data_type: number(38,0)
         description: Primary key on the customers table
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: region
         data_type: varchar(20)
         description: region name
-        tests:
+        data_tests:
           - accepted_values:
               values: ['AFRICA','MIDDLE EAST','ASIA','EUROPE','AMERICA']
               severity: warn
@@ -57,7 +57,7 @@ models:
     columns:
       - name: part_key
         description: primary key of the model
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: manufacturer
@@ -80,7 +80,7 @@ models:
     columns:
       - name: supplier_key
         description: primary key of the model
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: supplier_name
@@ -101,7 +101,7 @@ models:
     columns:
       - name: order_item_key
         description: '{{ doc("order_item_key") }}'
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: order_key
@@ -172,21 +172,21 @@ models:
           - type: primary_key # not enforced  -- will warn & include
           - type: check       # not supported -- will warn & skip
             expression: "id > 0"
-        tests:
+        data_tests:
           - unique
       - name: customer_key
         description: foreign key for customers
         data_type: number
         constraints:
           - type: not_null
-        tests:
+        data_tests:
           - relationships:
               to: ref('dim_customers')
               field: customer_key
       - name: order_date
         description: date of the order
         data_type: date
-        tests:
+        data_tests:
           - not_null
       - name: status_code
         description: status of the order
