@@ -33,8 +33,7 @@ vars:
   test: 'false' # to trigger runs for unit testing - override in a CLI param in testing job
   fct_order_items: 'mock_source__fct_order_items' # this is a map for unit testing
   dbt_metrics_calendar_model: all_days
-  
-  use_force_applying_masking_policy: "True" # dbt snow mask
+
 
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
