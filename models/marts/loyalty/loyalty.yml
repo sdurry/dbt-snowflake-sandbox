@@ -37,7 +37,7 @@ models:
         description: 'loyalty tier: bronze, silver, or gold'
         constraints:
           - type: not_null
-        tests:
+        data_tests:
           - accepted_values:
               values: ['bronze', 'silver', 'gold']
       - name: points_amount
