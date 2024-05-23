@@ -22,10 +22,10 @@ models:
         columns:
           - customer_key
         name: PK_1
-      - type: foreign_key
-        columns:
-          - customer_key
-        expression: "{{ target.schema }}.dim_customers(customer_key)"
+      # - type: foreign_key
+      #   columns:
+      #     - customer_key
+      #   expression: "{{ target.schema }}.dim_customers(customer_key)"
     columns:
       - name: customer_key
         data_type: number(38,0)
