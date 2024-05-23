@@ -158,11 +158,6 @@ models:
     config:
       contract:
         enforced: true
-    constraints:
-      - type: foreign_key
-        columns: [customer_key]
-        name: FK_SALES_ORDER_PLACED_BY_CUSTOMER
-        expression: "{{ target.schema }}.dim_customers(CUSTOMER_KEY)"
     columns:
       - name: order_key
         description: primary key of the model
