@@ -15,8 +15,7 @@ renamed as (
         c_phone as phone_number,
         c_acctbal as account_balance,
         c_mktsegment as market_segment,
-        c_comment as comment,
-        CURRENT_TIMESTAMP as loaded_at
+        c_comment as comment
 
     from source
 
