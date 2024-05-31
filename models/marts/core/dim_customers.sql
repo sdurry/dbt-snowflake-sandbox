@@ -29,8 +29,7 @@ final as (
         region.name as region,
         customer.phone_number,
         customer.account_balance,
-        customer.market_segment,
-        sysdate() as last_updated_at
+        customer.market_segment
     from
         customer
         inner join nation
