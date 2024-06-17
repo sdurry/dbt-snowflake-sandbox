@@ -18,7 +18,8 @@ final as (
         type,
         size,
         container,
-        retail_price
+        retail_price,
+         1 as new_col
     from
         part
 )
