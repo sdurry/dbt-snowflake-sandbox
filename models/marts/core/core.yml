@@ -158,6 +158,11 @@ models:
     config:
       contract:
         enforced: true
+    tests:
+      - dbt_utils.recency:
+          datepart: hour
+          field: order_date
+          interval: 12
     columns:
       - name: order_key
         description: primary key of the model

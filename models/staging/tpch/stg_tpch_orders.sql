@@ -1,3 +1,9 @@
+{% set query %}
+  select min(datediff('days',o_orderdate,sysdate())) as rebase_days from {{ source('tpch', 'orders') }}
+{% endset %}
+
+{%- set rebase_days = dbt_utils.get_single_value(query, default=0) -%}
+
 with source as (
 
     select * from {{ source('tpch', 'orders') }}
@@ -12,7 +18,7 @@ renamed as (
         o_custkey as customer_key,
         o_orderstatus as status_code,
         o_totalprice as total_price,
-        o_orderdate as order_date,
+        dateadd(days, {{rebase_days}}, o_orderdate) as order_date,
         o_orderpriority as priority_code,
         o_clerk as clerk_name,
         o_shippriority as ship_priority,
