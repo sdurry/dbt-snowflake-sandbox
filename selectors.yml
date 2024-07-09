@@ -1,0 +1,16 @@
+selectors:
+  - name: models_with_fresh_data
+    description: "Parent Models of passed recency tests"
+    definition:
+      method: result
+      value: pass
+      children: false
+      parents: true
+      parents_depth: 1 
+
+  - name: children_of_fresh_models
+    definition:
+      method: selector
+      value: models_with_fresh_data
+      children: true
+      
