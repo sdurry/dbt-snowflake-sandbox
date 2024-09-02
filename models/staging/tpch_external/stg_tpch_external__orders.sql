@@ -1,8 +1,15 @@
+{{
+    config(
+        materialized='view'
+    )
+}}
+
 with 
 
 source as (
 
     select * from {{ source('tpch_external', 'orders') }}
+
 
 ),
 

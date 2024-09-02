@@ -6,7 +6,7 @@ sources:
     description: TPCH sample data managed via an external schema in S3
     database: raw
     schema: tpch_external
-    loader: Glue # informational only (free text)
+    loader: Fivetran # informational only (free text)
     loaded_at_field: collector_tstamp
 
     # meta fields are rendered in auto-generated documentation
