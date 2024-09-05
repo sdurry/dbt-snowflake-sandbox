@@ -1,0 +1,16 @@
+models:
+  - name: dim_customer_loyalty
+    description: This model categorizes customers into different loyalty levels based on their total purchase amount and assigns them points.
+    columns:
+      - name: customer_key
+        description: A unique identifier for each customer.
+        tests:
+          - unique
+          - not_null
+      - name: medallion_level
+        description: The loyalty tier of the customer, categorized as 'gold', 'silver', or 'bronze' based on their total spending.
+        tests:
+          - accepted_values:
+              values: ['gold', 'silver', 'bronze']
+      - name: points_amount
+        description: The total number of points assigned to the customer, calculated by dividing their total spending by 10,000 and rounding to the nearest whole number.
