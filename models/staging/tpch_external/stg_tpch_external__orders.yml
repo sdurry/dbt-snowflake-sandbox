@@ -1,0 +1,39 @@
+models:
+  - name: stg_tpch_external__orders
+    description: This model transforms and standardizes order data from the external tpch source, making it suitable for downstream analytics and reporting. It includes detailed information about each order, including customer, order status, price, and priorities.
+    columns:
+      - name: order_id
+        description: A unique identifier for each order.
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: A unique identifier for the customer who placed the order.
+        tests:
+          - not_null
+      - name: order_status
+        description: The current status of the order (e.g., shipped, pending).
+        tests:
+          - not_null
+      - name: order_price
+        description: The total price of the order in dollars.
+        tests:
+          - not_null
+      - name: order_date
+        description: The date when the order was placed.
+        tests:
+          - not_null
+      - name: order_priority_value
+        description: A numeric value indicating the priority of the order.
+        tests:
+          - not_null
+      - name: order_priority
+        description: A textual description of the order's priority.
+        tests:
+          - not_null
+      - name: clerk_name
+        description: The name of the clerk responsible for the order.
+      - name: ship_priority
+        description: A numeric value indicating the shipping priority of the order.
+        tests:
+          - not_null
