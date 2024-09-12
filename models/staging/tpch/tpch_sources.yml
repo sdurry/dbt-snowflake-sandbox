@@ -13,14 +13,14 @@ sources:
           warn_after: {count: 6, period: hour}
           # error_after: {count: 12, period: hour}
         loaded_at_field: o_orderdate::timestamp
-        
+
         columns:
           - name: o_orderkey
             description: SF*1,500,000 are sparsely populated
-            data_tests: 
+            data_tests:
               - unique
               - not_null
-                  
+
           - name: o_custkey
             description: Foreign Key to C_CUSTKEY
             data_tests:
@@ -41,7 +41,6 @@ sources:
             description: numeric representation of the shipping priority, zero being the default
           - name: o_comment
             description: '{{ doc("comment") }}'
-          
       - name: customer
         description: main customer table
         columns:
@@ -61,7 +60,7 @@ sources:
           - name: c_phone
             description: phone number of the customer
           - name: c_acctbal
-            description: raw account balance 
+            description: raw account balance
           - name: c_mktsegment
             description: market segment of the customer
           - name: c_comment
@@ -77,7 +76,7 @@ sources:
                   to: source('tpch', 'orders')
                   field: o_orderkey
           - name: l_partkey
-            description:  Foreign key to P_PARTKEY, first part of the compound Foreign Key to (PS_PARTKEY,PS_SUPPKEY) with L_SUPPKEY
+            description: Foreign key to P_PARTKEY, first part of the compound Foreign Key to (PS_PARTKEY,PS_SUPPKEY) with L_SUPPKEY
             data_tests:
               - relationships:
                   to: source('tpch', 'part')
@@ -181,7 +180,7 @@ sources:
           - name: ps_availqty
             description: raw available quantity
           - name: ps_supplycost
-            description: raw cost 
+            description: raw cost
           - name: ps_comment
             description: '{{ doc("comment") }}'
 

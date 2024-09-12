@@ -59,7 +59,6 @@ models:
         description: item level tax total
       - name: net_item_sales_amount
         description: '{{ doc("net_item_sales_amount") }}'
-  
   - name: part_suppliers
     description: Intermediate model where we join part, supplier and part_supplier. This model is at the part supplier level.
     columns:

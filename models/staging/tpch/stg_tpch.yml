@@ -78,8 +78,8 @@ models:
       - name: region_key
         description: foreign key to stg_tpch_regions
       - name: comment
-        description: additional commentary             
- 
+        description: additional commentary
+
   - name: stg_tpch_orders
     description: staging layer for orders data
     columns:
@@ -123,7 +123,6 @@ models:
         description: '{{ doc("cost") }}'
       - name: comment
         description: '{{ doc("comment") }}'
-            
   - name: stg_tpch_parts
     description: staging layer for parts data
     columns:

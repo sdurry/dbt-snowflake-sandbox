@@ -55,6 +55,12 @@ sources:
               expression: metadata$filename
 
         columns:
+          - name: VALUE
+            description: The value of this row
+            data_type: VARIANT
+          - name: SOURCE_FILE_NAME
+            description: ''
+            data_type: TEXT
           - name: ISIN
             data_type: TEXT
             description: "ISIN of the security"
@@ -66,10 +72,10 @@ sources:
             description: "The underlying security"
           - name: UnderlyingISIN
             data_type: TEXT
-            description: "ISIN of any underlying security	"
+            description: "ISIN of any underlying security\t"
           - name: Currency
             data_type: TEXT
-            description: "Currency in which the product is traded	(ISO 4127)"
+            description: "Currency in which the product is traded\t(ISO 4127)"
           - name: SecurityType
             data_type: TEXT
             description: "Type of instrument"

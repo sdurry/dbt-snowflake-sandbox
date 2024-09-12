@@ -9,14 +9,111 @@ models:
           - unique
           - not_null
 
+      - name: NAME
+        description: ''
+        data_type: TEXT
+      - name: ADDRESS
+        description: ''
+        data_type: TEXT
+      - name: NATION_KEY
+        description: ''
+        data_type: NUMBER
+      - name: PHONE_NUMBER
+        description: ''
+        data_type: TEXT
+      - name: ACCOUNT_BALANCE
+        description: ''
+        data_type: NUMBER
+      - name: MARKET_SEGMENT
+        description: ''
+        data_type: TEXT
+      - name: COMMENT
+        description: ''
+        data_type: TEXT
   - name: use_variables
     description: demo to show variables
     columns:
       - name: order_item_key
         tests:
           - unique
-          - not_null 
+          - not_null
 
+        data_type: TEXT
+      - name: ORDER_KEY
+        description: foreign key for orders
+        data_type: NUMBER
+      - name: ORDER_DATE
+        description: date of the order
+        data_type: DATE
+      - name: CUSTOMER_KEY
+        description: foreign key for customers
+        data_type: NUMBER
+      - name: PART_KEY
+        description: foreign key for part
+        data_type: NUMBER
+      - name: SUPPLIER_KEY
+        description: foreign key for suppliers
+        data_type: NUMBER
+      - name: ORDER_ITEM_STATUS_CODE
+        description: status of the order item
+        data_type: TEXT
+      - name: RETURN_FLAG
+        description: letter determining the status of the return
+        data_type: TEXT
+      - name: LINE_NUMBER
+        description: sequence of the order items within the order
+        data_type: NUMBER
+      - name: SHIP_DATE
+        description: the date the order item is being shipped
+        data_type: DATE
+      - name: COMMIT_DATE
+        description: the date the order item is being commited
+        data_type: DATE
+      - name: RECEIPT_DATE
+        description: the receipt date of the order item
+        data_type: DATE
+      - name: SHIP_MODE
+        description: method of shipping
+        data_type: TEXT
+      - name: SUPPLIER_COST
+        description: raw cost
+        data_type: NUMBER
+      - name: BASE_PRICE
+        description: since extended_price is the line item total, we back out the price per item
+        data_type: NUMBER
+      - name: DISCOUNT_PERCENTAGE
+        description: percentage of the discount
+        data_type: NUMBER
+      - name: DISCOUNTED_PRICE
+        description: factoring in the discount_percentage, the line item discount total
+        data_type: NUMBER
+      - name: TAX_RATE
+        description: tax rate of the order item
+        data_type: NUMBER
+      - name: ORDER_ITEM_COUNT
+        description: count of order items
+        data_type: NUMBER
+      - name: QUANTITY
+        description: total units
+        data_type: NUMBER
+      - name: GROSS_ITEM_SALES_AMOUNT
+        description: same as extended_price
+        data_type: NUMBER
+      - name: DISCOUNTED_ITEM_SALES_AMOUNT
+        description: line item (includes quantity) discount amount
+        data_type: NUMBER
+      - name: ITEM_DISCOUNT_AMOUNT
+        description: item level discount amount. this is always a negative number
+        data_type: NUMBER
+      - name: ITEM_TAX_AMOUNT
+        description: item level tax total
+        data_type: NUMBER
+      - name: NET_ITEM_SALES_AMOUNT
+        description: the net total which factors in discount and tax
+        data_type: NUMBER
   - name: get_area_of_circle
     description: demo to show udfs
-        
+    columns:
+      - name: AREA
+        description: ''
+        data_type: FLOAT
