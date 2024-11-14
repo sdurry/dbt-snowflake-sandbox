@@ -1,0 +1,16 @@
+models:
+  - name: customer_loyalty
+    description: This model calculates the loyalty level and points for customers based on their total purchase amount. It categorizes customers into medallion levels such as gold, silver, and bronze, and assigns points based on their spending.
+    columns:
+      - name: customer_key
+        description: A unique identifier for each customer.
+        data_tests:
+          - unique
+          - not_null
+      - name: medallion_level
+        description: The loyalty tier assigned to a customer based on their total spending, categorized as gold, silver, or bronze.
+        data_tests:
+          - accepted_values:
+              values: ['gold', 'silver']
+      - name: points_amount
+        description: The number of loyalty points a customer has earned, calculated by dividing their total spending by 10,000.
