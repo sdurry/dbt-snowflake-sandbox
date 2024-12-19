@@ -50,6 +50,8 @@ models:
       - name: last_updated_at
         description: system timestamp of data loading
         data_type: timestamp
+      - name: new_col
+        data_type: int
 
 
   - name: dim_parts
