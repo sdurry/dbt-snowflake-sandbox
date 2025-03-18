@@ -206,6 +206,14 @@ models:
       - name: gross_item_sales_amount
         description: '{{ doc("gross_item_sales_amount") }}'
         data_type: number
+        data_tests:
+          - is_even
+          - dbt_expectations.expect_column_median_to_be_between:
+              min_value: 20000
+              max_value: 30000
+              # group_by: [group_id, other_group_id, ...] # (Optional)
+              # row_condition: "id is not null" # (Optional)
+              # strictly: false # (Optional. Default is 'false'. Adds an 'or equal to' to the comparison operator for min/max)
       - name: item_discount_amount
         description: '{{ doc("item_discount_amount") }}'
         data_type: number
