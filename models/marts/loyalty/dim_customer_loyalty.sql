@@ -29,4 +29,4 @@ select
    from cust_ord 
 )
 
-select *
+select * from business_logic
