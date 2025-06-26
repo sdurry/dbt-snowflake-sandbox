@@ -22,6 +22,7 @@ models:
             expression: "id > 0"
         data_tests:
           - unique
+          - not_null
       - name: customer_key
         description: foreign key for customers
         data_type: number
