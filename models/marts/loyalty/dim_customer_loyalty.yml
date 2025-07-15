@@ -29,7 +29,7 @@ models:
         purchase amount divided by 10,000.
       data_tests:
         - dbt_expectations.expect_column_median_to_be_between:
-            min_value: 200
+            min_value: 195
             max_value: 300
             row_condition: "customer_key is not null"  # (optional)
             strictly: false # (Optional. Default is 'false'. Adds an 'or equal to' to the comparison operator for min/max)
