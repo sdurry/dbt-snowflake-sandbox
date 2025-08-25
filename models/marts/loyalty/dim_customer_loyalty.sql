@@ -35,4 +35,4 @@ select
    from cust_ord 
 )
 
-select * from business_logic
+select *, 1 as new_col from business_logic
