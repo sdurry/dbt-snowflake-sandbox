@@ -27,8 +27,8 @@ models:
         data_tests:
           - dbt_expectations.expect_column_median_to_be_between:
               arguments:
-                min_value: 200
-                max_value: 300
+                min_value: 190
+                max_value: 290
                 row_condition: "customer_key is not null"
                 strictly: false
       - name: load_date
