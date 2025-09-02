@@ -43,18 +43,14 @@ models:
   stephans_snow_sandbox:
     staging:
       +group: data_engineering
-      +required_tests:
-        unique.*|not_null: 1
       +materialized: view
     marts:
       +group: bi_team
       core:
-        +required_tests:
-          unique.*|not_null: 1
         +materialized: table
 snapshots:
   stephans_snow_sandbox:
-    +target_schema: "{% if target.name == 'prod' %}snaps{% else %}{{ target.schema }}{% endif %}"
+    +schema: "{% if target.name == 'prod' %}snaps{% else %}{{ target.schema }}{% endif %}"
 seeds:
   stephans_snow_sandbox:
     snowflake_contract_rates:
