@@ -1,3 +1,5 @@
+{{ config(static_analysis='off') }}
+
 with base_spine as (
 {{ dbt_utils.date_spine(
     datepart="day",
