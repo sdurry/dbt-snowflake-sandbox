@@ -1,48 +1,36 @@
-
-# Name your project! Project names should contain only lowercase characters
-# and underscores. A good package name should reflect your organization's
-# name or the intended use of these models
-name: 'stephans_snow_sandbox'
-version: '1.3.0'
-require-dbt-version: '>=1.3.0'
 config-version: 2
 
-model-paths: ["models"]
-test-paths: ["tests"]
-docs-paths: ["docs"]
-seed-paths: ["data"]
-macro-paths: ["macros"]
-snapshot-paths: ["snapshots"]
+name: stephans_snow_sandbox
+version: 2.0
+profile: tpch
 
-
-target-path: "target"  # directory which will store compiled SQL files
-clean-targets:         # directories to be removed by `dbt clean`
-    - "target"
-    - "dbt_packages"
-
+model-paths:
+  - models
+test-paths:
+  - tests
+docs-paths:
+  - docs
+seed-paths:
+  - data
+macro-paths:
+  - macros
+snapshot-paths:
+  - snapshots
+clean-targets:
+  - target
+  - dbt_packages
 on-run-start:
-  - "alter warehouse transforming set warehouse_size=small;"
-  - '{{create_udfs()}}' # comment / uncomment this line to build UDFs called in the create_udfs macro
-
+  - alter warehouse transforming set warehouse_size=small;
+  - '{{create_udfs()}}'
 on-run-end:
-  - "alter warehouse transforming set warehouse_size=xsmall;"
+  - alter warehouse transforming set warehouse_size=xsmall;
   - "{{ grant_all_on_schemas(schemas, 'transformer') }}"
-
 vars:
   start_date: '1999-01-01'
-  test: 'false' # to trigger runs for unit testing - override in a CLI param in testing job
-  fct_order_items: 'mock_source__fct_order_items' # this is a map for unit testing
+  test: 'false'
+  fct_order_items: mock_source__fct_order_items
   dbt_metrics_calendar_model: all_days
-
-
-# Configuring models
-# Full documentation: https://docs.getdbt.com/docs/configuring-models
-
-models:  
-  ## dbt meta testing
-  ## +required_docs: true
-
-  ## Snowflake specifics
+models:
   +automatic_clustering: true
   +query_tag: stephan-sandbox
   +persist_docs:
@@ -50,33 +38,24 @@ models:
     columns: true
   +copy_grants: true
   +grants:
-    select: ['transformer']
-
+    select:
+      - transformer
   stephans_snow_sandbox:
     staging:
-      # The +required_tests config must be None or a dict with str keys and int values. YAML dictionaries are accepted.
-      +required_tests: {"unique.*|not_null": 1}
+      +group: data_engineering
       +materialized: view
-
     marts:
+      +group: bi_team
       core:
-        materialized: table
-        +required_tests:
-            # The following configuration on the `marts` model path requires
-            # each model in that path to have at least one test that either:
-            #
-            #    1. starts with "unique" (note the ".*" regex suffix) OR (note the "|" regex)
-            #    2. is an exact match for the "not_null" test.
-            "unique.*|not_null": 1
-        
-
+        +materialized: table
 snapshots:
   stephans_snow_sandbox:
-    +target_schema: "{% if target.name == 'prod' %}snaps{% else %}{{ target.schema }}{% endif %}"
-
+    +schema: "{% if target.name == 'prod' %}snaps{% else %}{{ target.schema }}{% endif %}"
 seeds:
   stephans_snow_sandbox:
     snowflake_contract_rates:
       +column_types:
         effective_date: DATE
-        rate: NUMBER   
+        rate: NUMBER
+flags:
+  require_generic_test_arguments_property: true

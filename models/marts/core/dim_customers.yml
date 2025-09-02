@@ -22,16 +22,19 @@ models:
         description: region name
         data_tests:
           - accepted_values:
-              values: ['AFRICA','MIDDLE EAST','ASIA','EUROPE','AMERICA']
-              severity: warn
+              config:
+                severity: warn
+              arguments:
+                values: ['AFRICA', 'MIDDLE EAST', 'ASIA', 'EUROPE', 'AMERICA']
       - name: name
         data_type: varchar
         description: customer id
       - name: address
         data_type: varchar
         description: address of the customer
-        meta:
-          masking_policy: mp_encrypt_pii
+        config:
+          meta:
+            masking_policy: mp_encrypt_pii
       - name: nation_key
         data_type: number(38,0)
         description: foreign key to stg_tpch_nations

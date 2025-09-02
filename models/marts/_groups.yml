@@ -1,0 +1,9 @@
+version: 2
+
+groups:
+  - name: data_engineering
+    owner:
+      email: stephan.durry@dbtlabs.com # Example email for demo purpose  
+  - name: bi_team
+    owner:
+      email: stephan.durry@dbtlabs.com # Example email for demo purpose  

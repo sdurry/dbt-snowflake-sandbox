@@ -1,6 +1,6 @@
 version: 2
 
-models: 
+models:
   - name: fct_orders
     description: orders fact table
     config:
@@ -8,9 +8,10 @@ models:
         enforced: true
     tests:
       - dbt_utils.recency:
-          datepart: day
-          field: order_date
-          interval: 12
+          arguments:
+            datepart: day
+            field: order_date
+            interval: 12
     columns:
       - name: order_key
         description: primary key of the model
@@ -29,8 +30,9 @@ models:
           - type: not_null
         data_tests:
           - relationships:
-              to: ref('dim_customers')
-              field: customer_key
+              arguments:
+                to: ref('dim_customers')
+                field: customer_key
       - name: order_date
         description: date of the order
         data_type: date
@@ -41,10 +43,12 @@ models:
         data_type: varchar(1)
         data_tests:
           - accepted_values:
-              values:
-                - "F"
-                - "O"
-              severity: warn
+              config:
+                severity: warn
+              arguments:
+                values:
+                  - "F"
+                  - "O"
       - name: priority_code
         description: code associated with the order
         data_type: varchar(20)
