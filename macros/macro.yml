@@ -1,9 +1,6 @@
 version: 2
 
 macros:
-  - name: create_masking_policy_mp_encrypt_pii.sql
-    description: our macro to handle masking for pii metatag
-
   - name: cents_to_dollars
     description: A macro to convert cents to dollars
     arguments:
