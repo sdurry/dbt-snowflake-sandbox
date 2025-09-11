@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: dim_customer_loyalty
+    description: This model categorizes customers into loyalty tiers based on their total purchase amount. It assigns a medallion level of 'gold', 'silver', or 'bronze' depending on the total sales amount in USD. Additionally, it calculates loyalty points and records the data load date.
+    columns:
+      - name: customer_key
+        data_type: int
+        description: A unique identifier for each customer.
+        data_tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                field: customer_key
+                to: ref('dim_customers')
+      - name: medallion_level
+        data_type: varchar(20)
+        description: The loyalty tier assigned to a customer based on their total purchase amount. It can be 'gold', 'silver', or 'bronze'.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['gold', 'silver', 'bronze']
+      - name: points_amount
+        data_type: int
+        description: The number of loyalty points a customer has, calculated as total purchase amount divided by 10,000.
+        data_tests:
+          - dbt_expectations.expect_column_median_to_be_between:
+              arguments:
+                min_value: 200
+                max_value: 300
+                row_condition: "customer_key is not null"
+                strictly: false
+      - name: load_date
+        data_type: TIMESTAMP_LTZ
+        description: The date and time when the data was loaded into the system.
