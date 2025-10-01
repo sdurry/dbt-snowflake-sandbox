@@ -49,6 +49,7 @@ models:
                 values:
                   - "F"
                   - "O"
+                  - "P"
       - name: priority_code
         description: code associated with the order
         data_type: varchar(20)
