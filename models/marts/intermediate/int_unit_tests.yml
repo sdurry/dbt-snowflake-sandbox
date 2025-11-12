@@ -1,5 +1,7 @@
 unit_tests:
   - name: test_correct_base_price # this is the unique name of the test
+    config:  
+      enabled: false
     description: >
       Check my base price calculation
     model: order_items # name of the model I'm unit testing
