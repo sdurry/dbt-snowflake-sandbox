@@ -49,7 +49,6 @@ models:
       +group: bi_team
       core:
         +materialized: table
-        +enabled: true
         +static_analysis: off
 
 snapshots:
