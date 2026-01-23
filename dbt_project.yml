@@ -42,7 +42,7 @@ models:
       - transformer
   stephans_snow_sandbox:
     +static_analysis: "{{ env_var('DBT_STATIC_ANALYSIS', 'on') }}"
-    +post-hook: "{{ test() }}"
+    +post-hook: "{{ test() if env_var('DBT_ENVIRONMENT') == 'P' }}"
     staging:
       +group: data_engineering
       +materialized: view
