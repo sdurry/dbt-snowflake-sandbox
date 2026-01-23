@@ -48,7 +48,8 @@ models:
     marts:
       +group: bi_team
       core:
-        +static_analysis: "off"
+        +static_analysis: "off" ## doesn't raise an error at parse time in a job
+        # +static_analysis: off ## raises an error at parse time in a job
         +materialized: table
 
 snapshots:
