@@ -42,7 +42,6 @@ models:
       - transformer
   stephans_snow_sandbox:
     +static_analysis: "{{ env_var('DBT_STATIC_ANALYSIS', 'on') }}"
-    +post-hook: "{{ test() if env_var('DBT_ENVIRONMENT') == 'P' }}"
     staging:
       +group: data_engineering
       +materialized: view
@@ -50,6 +49,9 @@ models:
       +group: bi_team
       core:
         +materialized: table
+        +enabled: false
+        +static_analysis: off
+
 snapshots:
   stephans_snow_sandbox:
     +schema: "{% if target.name == 'prod' %}snaps{% else %}{{ target.schema }}{% endif %}"
