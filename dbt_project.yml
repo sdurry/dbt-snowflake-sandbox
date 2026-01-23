@@ -49,7 +49,6 @@ models:
       +group: bi_team
       core:
         +materialized: table
-        +static_analysis: off
 
 snapshots:
   stephans_snow_sandbox:
