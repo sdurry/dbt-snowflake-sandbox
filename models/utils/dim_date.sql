@@ -1,6 +1,6 @@
 
 {{ config(
-    full_refresh = false
+    full_refresh = true
 ) }}
 
 WITH RECURSIVE CalendarDates AS (
