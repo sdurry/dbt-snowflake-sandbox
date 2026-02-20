@@ -1,0 +1,34 @@
+models:
+- name: dim_date
+  description: This model serves as a date dimension table, providing a comprehensive
+    set of date-related attributes for use in time-based analyses. It is designed
+    to support various time-based calculations and aggregations, such as year, quarter,
+    month, and day breakdowns, as well as fiscal periods and holidays.
+  columns:
+  - name: date_id
+    description: A unique identifier for each date, typically in the format YYYYMMDD.
+  - name: full_date
+    description: The complete date in a standard format, used for display and reporting.
+  - name: day_of_week
+    description: The day of the week for the date, where 1 represents Monday and 7
+      represents Sunday.
+  - name: day_name
+    description: The name of the day of the week, such as Monday or Tuesday.
+  - name: day_of_month
+    description: The day of the month for the date, ranging from 1 to 31.
+  - name: day_of_year
+    description: The day of the year for the date, ranging from 1 to 366.
+  - name: week_of_year
+    description: The week number of the year for the date, used in weekly aggregations.
+  - name: month
+    description: The month number for the date, ranging from 1 to 12.
+  - name: month_name
+    description: The name of the month, such as January or February.
+  - name: quarter
+    description: The quarter of the year for the date, ranging from 1 to 4.
+  - name: year
+    description: The year for the date, used in yearly aggregations.
+  - name: fiscal_year
+    description: The fiscal year for the date, used in financial reporting.
+  - name: is_holiday
+    description: A boolean indicating whether the date is a recognized holiday.
