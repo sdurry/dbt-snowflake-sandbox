@@ -53,3 +53,5 @@ models:
       - name: last_updated_at
         description: system timestamp of data loading
         data_type: timestamp
+      - name: is_focus_region
+        data_type: boolean

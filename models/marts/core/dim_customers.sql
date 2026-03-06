@@ -30,7 +30,12 @@ final as (
         customer.phone_number,
         customer.account_balance,
         customer.market_segment,
+        case 
+            when region.name in ('AFRICA', 'AMERICA') then true 
+            else false
+        end as is_focus_region,
         sysdate() as last_updated_at
+
     from
         customer
         inner join nation
