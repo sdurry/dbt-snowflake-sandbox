@@ -1,0 +1,40 @@
+version: 2
+
+sources:
+  # https://docs.getdbt.com/reference/source-properties#overview
+  - name: orders
+    description: Raw orders
+    database: sdurry_dev
+    schema: dbt_sdurry
+    config:
+      freshness:
+#        warn_after:
+#          count: 1
+#          period: minute
+#        error_after:
+#          count: 1
+#          period: day
+#      loaded_at_field: loaded_at_ts
+    tables:
+      - name: orders_table
+        identifier: stg_tpch_orders
+        description: main order tracking table
+        columns:
+          - name: order_key
+            description: primary key of the model
+          - name: customer_key
+            description: foreign key to stg_tpch_customers
+          - name: status_code
+            description: status of the order
+          - name: total_price
+            description: raw price
+          - name: order_date
+            description: date the order was made
+          - name: priority_code
+            description: code associated with the order
+          - name: clerk_name
+            description: id of the clerk
+          - name: ship_priority
+            description: numeric representation of the shipping priority, zero being the default
+          - name: comment
+            description: '{{ doc("comment") }}'

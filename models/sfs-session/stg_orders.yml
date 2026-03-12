@@ -1,0 +1,29 @@
+
+models:
+  - name: stg_orders
+    description: cleaned order records at the order grain
+    columns:
+      - name: order_id
+        description: unique identifier for the order
+        data_type: number
+      - name: customer_id
+        description: identifier of the customer who placed the order
+        data_type: number
+      - name: order_status_code
+        description: source system code representing the order status
+        data_type: varchar
+      - name: order_status
+        description: standardized order status label
+        data_type: varchar
+      - name: total_price_in_usd
+        description: total order amount in usd
+        data_type: number(12,2)
+      - name: order_date
+        description: date the order was placed
+        data_type: date
+      - name: priority_code
+        description: order priority code
+        data_type: varchar
+      - name: ship_priority
+        description: shipping priority indicator for the order
+        data_type: number

@@ -41,7 +41,7 @@ models:
     select:
       - transformer
   stephans_snow_sandbox:
-    +static_analysis: "{{ env_var('DBT_STATIC_ANALYSIS', 'off') }}"
+    +static_analysis: "{{ env_var('DBT_STATIC_ANALYSIS', 'strict') }}"
     staging:
       +group: data_engineering
       +materialized: view
