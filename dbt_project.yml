@@ -21,7 +21,7 @@ clean-targets:
   - dbt_packages
 on-run-start:
   - alter warehouse transforming set warehouse_size=small;
-  - '{{create_udfs()}}'
+  #- '{{create_udfs()}}'
 on-run-end:
   - alter warehouse transforming set warehouse_size=xsmall;
   - "{{ grant_all_on_schemas(schemas, 'transformer') }}"

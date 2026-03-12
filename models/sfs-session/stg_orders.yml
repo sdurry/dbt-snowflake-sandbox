@@ -6,15 +6,24 @@ models:
       - name: order_id
         description: unique identifier for the order
         data_type: number
+        data_tests:
+          - unique
+          - not_null
       - name: customer_id
         description: identifier of the customer who placed the order
         data_type: number
+        data_tests:
+          - not_null
       - name: order_status_code
         description: source system code representing the order status
         data_type: varchar
       - name: order_status
         description: standardized order status label
         data_type: varchar
+        data_tests:
+          - accepted_values:
+              arguments: 
+                values: ['ordered', 'filled', 'pending']
       - name: total_price_in_usd
         description: total order amount in usd
         data_type: number(12,2)

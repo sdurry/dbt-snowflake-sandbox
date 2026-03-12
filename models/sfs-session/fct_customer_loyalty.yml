@@ -6,13 +6,27 @@ models:
     columns:
       - name: customer_id
         data_type: int
+        data_tests:
+          - unique
+          - not_null
         description: A unique identifier for each customer.
       - name: medallion_level
         data_type: varchar(20)
         description: The loyalty tier assigned to a customer based on their total purchase amount. It can be 'gold', 'silver', or 'bronze'.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['gold', 'silver', 'bronze']
       - name: points_amount
         data_type: int
         description: The number of loyalty points a customer has, calculated as total purchase amount divided by 10,000.
+        data_tests:
+          - dbt_expectations.expect_column_median_to_be_between:
+              arguments:
+                min_value: 200
+                max_value: 300
+                row_condition: "customer_id is not null"
+                strictly: false
       - name: load_date
         data_type: TIMESTAMP_LTZ
         description: The date and time when the data was loaded into the system.

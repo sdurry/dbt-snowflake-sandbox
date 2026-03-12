@@ -8,13 +8,13 @@ sources:
     schema: dbt_sdurry
     config:
       freshness:
-#        warn_after:
-#          count: 1
-#          period: minute
-#        error_after:
-#          count: 1
-#          period: day
-#      loaded_at_field: loaded_at_ts
+        warn_after:
+          count: 12
+          period: hour
+        error_after:
+          count: 1
+          period: day
+      loaded_at_field: loaded_at_ts
     tables:
       - name: orders_table
         identifier: stg_tpch_orders
