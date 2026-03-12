@@ -1,4 +1,8 @@
-{{ config(static_analysis='unsafe') }}
+{{ config(
+    static_analysis='baseline',
+    materialized='table'
+    ) 
+}}
 
 {% set query %}
   select min(datediff('days',o_orderdate,sysdate())) as rebase_days from {{ source('tpch', 'orders') }}
@@ -24,7 +28,8 @@ renamed as (
         o_orderpriority as priority_code,
         o_clerk as clerk_name,
         o_shippriority as ship_priority,
-        o_comment as comment
+        o_comment as comment,
+        sysdate() as loaded_at_ts
 
     from source
 
