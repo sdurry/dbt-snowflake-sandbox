@@ -6,6 +6,9 @@ models:
     config:
       contract:
         enforced: true
+    semantic_model:
+      enabled: true
+    agg_time_dimension: order_date
     tests:
       - dbt_utils.recency:
           arguments:
@@ -16,6 +19,9 @@ models:
       - name: order_key
         description: primary key of the model
         data_type: number
+        entity:
+          type: primary
+          name: order
         constraints:
           - type: not_null
           - type: primary_key # not enforced  -- will warn & include
@@ -26,6 +32,9 @@ models:
       - name: customer_key
         description: foreign key for customers
         data_type: number
+        entity:
+          type: foreign
+          name: customer
         constraints:
           - type: not_null
         data_tests:
@@ -36,11 +45,16 @@ models:
       - name: order_date
         description: date of the order
         data_type: date
+        granularity: day
+        dimension:
+          type: time
         data_tests:
           - not_null
       - name: status_code
         description: status of the order
         data_type: varchar(1)
+        dimension:
+          type: categorical
         data_tests:
           - accepted_values:
               config:
@@ -52,12 +66,18 @@ models:
       - name: priority_code
         description: code associated with the order
         data_type: varchar(20)
+        dimension:
+          type: categorical
       - name: clerk_name
         description: id of the clerk
         data_type: varchar(40)
+        dimension:
+          type: categorical
       - name: ship_priority
         description: numeric representation of the shipping priority, zero being the default
         data_type: int
+        dimension:
+          type: categorical
       - name: order_count
         description: count of order
         data_type: int
@@ -73,3 +93,39 @@ models:
       - name: net_item_sales_amount
         description: '{{ doc("net_item_sales_amount") }}'
         data_type: number
+
+    metrics:
+      - name: order_count
+        description: Count of orders.
+        label: Order Count
+        type: simple
+        agg: count
+        expr: 1
+
+      - name: gross_item_sales_amount
+        description: Gross item sales amount across orders.
+        label: Gross Item Sales Amount
+        type: simple
+        agg: sum
+        expr: gross_item_sales_amount
+
+      - name: item_discount_amount
+        description: Total item discount amount across orders.
+        label: Item Discount Amount
+        type: simple
+        agg: sum
+        expr: item_discount_amount
+
+      - name: item_tax_amount
+        description: Total item tax amount across orders.
+        label: Item Tax Amount
+        type: simple
+        agg: sum
+        expr: item_tax_amount
+
+      - name: net_item_sales_amount
+        description: Net item sales amount across orders.
+        label: Net Item Sales Amount
+        type: simple
+        agg: sum
+        expr: net_item_sales_amount

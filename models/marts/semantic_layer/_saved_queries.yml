@@ -1,0 +1,20 @@
+saved_queries:
+  
+  - name: test_saved_query
+    description: some description
+    label: Test saved query
+    config:
+      cache:
+        enabled: false
+    query_params:
+      metrics:
+        - order_count
+      group_by:
+        - "TimeDimension('order__order_date', 'day')"
+        - "Dimension('order__status_code')"
+
+    exports:
+      - name: my_export
+        config:
+          export_as: table 
+          schema: dbt_sdurry_exports
