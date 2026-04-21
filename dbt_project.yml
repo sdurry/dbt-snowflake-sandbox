@@ -16,15 +16,17 @@ macro-paths:
   - macros
 snapshot-paths:
   - snapshots
+function-paths:
+  - functions
+
 clean-targets:
   - target
   - dbt_packages
+
 on-run-start:
   - alter warehouse transforming set warehouse_size=small;
-  - '{{create_udfs()}}'
 on-run-end:
   - alter warehouse transforming set warehouse_size=xsmall;
-  - "{{ grant_all_on_schemas(schemas, 'transformer') }}"
 vars:
   start_date: '1999-01-01'
   test: 'false'
@@ -41,7 +43,7 @@ models:
     select:
       - transformer
   stephans_snow_sandbox:
-    +static_analysis: "{{ env_var('DBT_STATIC_ANALYSIS', 'off') }}"
+    +static_analysis: strict
     staging:
       +group: data_engineering
       +materialized: view
@@ -58,5 +60,3 @@ seeds:
       +column_types:
         effective_date: DATE
         rate: NUMBER
-flags:
-  require_generic_test_arguments_property: true
