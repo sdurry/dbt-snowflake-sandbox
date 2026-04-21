@@ -1,4 +1,4 @@
-{{ config(static_analysis='unsafe') }}
+{{ config(static_analysis='baseline') }}
 
 {% set query %}
   select min(datediff('days',o_orderdate,sysdate())) as rebase_days from {{ source('tpch', 'orders') }}
