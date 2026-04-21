@@ -1,0 +1,67 @@
+version: 2
+
+models:
+  - name: dim_customer_segments
+    description: >
+      Assigns each customer a single LTV (lifetime value) segment tier.
+      LTV is computed by aggregating net_item_sales_amount from fct_orders.
+      Tier thresholds are derived from the global distribution of customer LTV:
+        - bronze: at or below the 25th percentile
+        - gold:   at or above the 90th percentile
+        - silver: everything in between
+    columns:
+      - name: customer_key
+        description: primary key for the customer
+        data_tests:
+          - unique
+          - not_null
+      - name: customer_name
+        description: customer display name
+      - name: market_segment
+        description: market segment the customer belongs to
+      - name: nation
+        description: nation of the customer
+      - name: region
+        description: region of the customer
+      - name: lifetime_value
+        description: total net sales amount across all orders for this customer
+      - name: ltv_segment
+        description: >
+          Single tier label based on lifetime value distribution.
+          bronze = ≤ p25, gold = ≥ p90, silver = everything in between.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['bronze', 'silver', 'gold']
+
+unit_tests:
+  - name: test_ltv_segment_assignment
+    description: >
+      Given 4 customers with LTVs of 100, 200, 300, and 500:
+        - p25 = PERCENTILE_CONT(0.25) of [100,200,300,500] = 175
+        - p90 = PERCENTILE_CONT(0.90) of [100,200,300,500] = 440
+      Expected tier assignment:
+        - customer_key 1 (LTV=100, ≤175)  → bronze
+        - customer_key 2 (LTV=200, >175, <440) → silver
+        - customer_key 3 (LTV=300, >175, <440) → silver
+        - customer_key 4 (LTV=500, ≥440)  → gold
+    model: dim_customer_segments
+    given:
+      - input: ref('fct_orders')
+        rows:
+          - {customer_key: 1, net_item_sales_amount: 100}
+          - {customer_key: 2, net_item_sales_amount: 200}
+          - {customer_key: 3, net_item_sales_amount: 300}
+          - {customer_key: 4, net_item_sales_amount: 500}
+      - input: ref('dim_customers')
+        rows:
+          - {customer_key: 1, name: 'Customer A', market_segment: 'AUTOMOBILE', nation: 'FRANCE', region: 'EUROPE'}
+          - {customer_key: 2, name: 'Customer B', market_segment: 'BUILDING', nation: 'GERMANY', region: 'EUROPE'}
+          - {customer_key: 3, name: 'Customer C', market_segment: 'FURNITURE', nation: 'ITALY', region: 'EUROPE'}
+          - {customer_key: 4, name: 'Customer D', market_segment: 'MACHINERY', nation: 'UNITED STATES', region: 'AMERICA'}
+    expect:
+      rows:
+        - {customer_key: 1, lifetime_value: 100, ltv_segment: 'bronze'}
+        - {customer_key: 2, lifetime_value: 200, ltv_segment: 'silver'}
+        - {customer_key: 3, lifetime_value: 300, ltv_segment: 'silver'}
+        - {customer_key: 4, lifetime_value: 500, ltv_segment: 'gold'}
