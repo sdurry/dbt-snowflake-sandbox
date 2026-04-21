@@ -9,26 +9,25 @@ models:
         - bronze: at or below the 25th percentile
         - gold:   at or above the 90th percentile
         - silver: everything in between
+    semantic_model:
+      enabled: false
     columns:
       - name: customer_key
         description: primary key for the customer
+        entity:
+          type: primary
+          name: customer
         data_tests:
           - unique
           - not_null
-      - name: customer_name
-        description: customer display name
-      - name: market_segment
-        description: market segment the customer belongs to
-      - name: nation
-        description: nation of the customer
-      - name: region
-        description: region of the customer
       - name: lifetime_value
         description: total net sales amount across all orders for this customer
       - name: ltv_segment
         description: >
           Single tier label based on lifetime value distribution.
           bronze = ≤ p25, gold = ≥ p90, silver = everything in between.
+        dimension:
+          type: categorical
         data_tests:
           - accepted_values:
               arguments:
@@ -55,10 +54,10 @@ unit_tests:
           - {customer_key: 4, net_item_sales_amount: 500}
       - input: ref('dim_customers')
         rows:
-          - {customer_key: 1, name: 'Customer A', market_segment: 'AUTOMOBILE', nation: 'FRANCE', region: 'EUROPE'}
-          - {customer_key: 2, name: 'Customer B', market_segment: 'BUILDING', nation: 'GERMANY', region: 'EUROPE'}
-          - {customer_key: 3, name: 'Customer C', market_segment: 'FURNITURE', nation: 'ITALY', region: 'EUROPE'}
-          - {customer_key: 4, name: 'Customer D', market_segment: 'MACHINERY', nation: 'UNITED STATES', region: 'AMERICA'}
+          - {customer_key: 1}
+          - {customer_key: 2}
+          - {customer_key: 3}
+          - {customer_key: 4}
     expect:
       rows:
         - {customer_key: 1, lifetime_value: 100, ltv_segment: 'bronze'}

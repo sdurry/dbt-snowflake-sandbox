@@ -35,10 +35,6 @@ final as (
 
     select
         c.customer_key,
-        c.name as customer_name,
-        c.market_segment,
-        c.nation,
-        c.region,
         ltv.lifetime_value,
         case
             when ltv.lifetime_value <= p.p25 then 'bronze'
