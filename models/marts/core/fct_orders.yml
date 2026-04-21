@@ -3,6 +3,9 @@ version: 2
 models:
   - name: fct_orders
     description: orders fact table
+    semantic_model:
+      enabled: true
+    agg_time_dimension: order_date
     config:
       contract:
         enforced: true
@@ -16,6 +19,9 @@ models:
       - name: order_key
         description: primary key of the model
         data_type: number
+        entity:
+          type: primary
+          name: sales_order
         constraints:
           - type: not_null
           - type: primary_key # not enforced  -- will warn & include
@@ -26,6 +32,9 @@ models:
       - name: customer_key
         description: foreign key for customers
         data_type: number
+        entity:
+          type: foreign
+          name: customer
         constraints:
           - type: not_null
         data_tests:
@@ -36,11 +45,16 @@ models:
       - name: order_date
         description: date of the order
         data_type: date
+        granularity: day
+        dimension:
+          type: time
         data_tests:
           - not_null
       - name: status_code
         description: status of the order
         data_type: varchar(1)
+        dimension:
+          type: categorical
         data_tests:
           - accepted_values:
               config:
@@ -52,6 +66,8 @@ models:
       - name: priority_code
         description: code associated with the order
         data_type: varchar(20)
+        dimension:
+          type: categorical
       - name: clerk_name
         description: id of the clerk
         data_type: varchar(40)
@@ -73,3 +89,29 @@ models:
       - name: net_item_sales_amount
         description: '{{ doc("net_item_sales_amount") }}'
         data_type: number
+    metrics:
+      - name: order_count
+        type: simple
+        label: Order Count
+        agg: count
+        expr: order_key
+      - name: gross_item_sales_amount
+        type: simple
+        label: Gross Item Sales Amount
+        agg: sum
+        expr: gross_item_sales_amount
+      - name: net_item_sales_amount
+        type: simple
+        label: Net Item Sales Amount
+        agg: sum
+        expr: net_item_sales_amount
+      - name: item_discount_amount
+        type: simple
+        label: Item Discount Amount
+        agg: sum
+        expr: item_discount_amount
+      - name: item_tax_amount
+        type: simple
+        label: Item Tax Amount
+        agg: sum
+        expr: item_tax_amount
