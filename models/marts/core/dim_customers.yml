@@ -3,6 +3,9 @@ version: 2
 models:
   - name: dim_customers
     description: Customer dimensions table
+    semantic_model:
+      enabled: true
+    agg_time_dimension: last_updated_at
     config:
       contract:
         enforced: true
@@ -14,12 +17,17 @@ models:
       - name: customer_key
         data_type: number(38,0)
         description: Primary key on the customers table
+        entity:
+          type: primary
+          name: customer
         data_tests:
           - unique
           - not_null
       - name: region
         data_type: varchar(20)
         description: region name
+        dimension:
+          type: categorical
         data_tests:
           - accepted_values:
               config:
@@ -41,6 +49,8 @@ models:
       - name: nation
         data_type: varchar(15)
         description: nation name
+        dimension:
+          type: categorical
       - name: phone_number
         data_type: varchar(15)
         description: phone number of the customer
@@ -50,6 +60,17 @@ models:
       - name: market_segment
         data_type: varchar(10)
         description: market segment of the customer
+        dimension:
+          type: categorical
       - name: last_updated_at
         description: system timestamp of data loading
         data_type: timestamp
+        granularity: day
+        dimension:
+          type: time
+    metrics:
+      - name: customer_count
+        type: simple
+        label: Customer Count
+        agg: count_distinct
+        expr: customer_key
