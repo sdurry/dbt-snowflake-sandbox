@@ -9,9 +9,14 @@ models:
         - bronze: at or below the 25th percentile
         - gold:   at or above the 90th percentile
         - silver: everything in between
+    semantic_model:
+      enabled: true
     columns:
       - name: customer_key
         description: primary key for the customer
+        entity:
+          type: primary
+          name: customer
         data_tests:
           - unique
           - not_null
@@ -21,6 +26,8 @@ models:
         description: >
           Single tier label based on lifetime value distribution.
           bronze = ≤ p25, gold = ≥ p90, silver = everything in between.
+        dimension:
+          type: categorical
         data_tests:
           - accepted_values:
               arguments:
