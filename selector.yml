@@ -1,0 +1,12 @@
+selectors:
+  - name: run_tests_for_reused_models
+    description: >
+      A default selector that makes sure tests run
+    default: true
+    definition:
+      union:
+        - union: 
+          - method: path
+            value: "*"
+          - method: resource_type
+            value: test
