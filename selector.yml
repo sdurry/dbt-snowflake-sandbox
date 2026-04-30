@@ -5,8 +5,7 @@ selectors:
     default: true
     definition:
       union:
-        - union: 
-          - method: path
-            value: "*"
-          - method: resource_type
-            value: test
+        - method: path
+          value: "*"
+        - method: resource_type
+          value: test
