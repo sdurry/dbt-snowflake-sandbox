@@ -13,7 +13,14 @@ models:
       enabled: true
     columns:
       - name: customer_key
-        description: primary key for the customer
+        description: |
+          [DESCRIPTION]
+
+          The primary key
+
+          [GRAIN]
+
+          One Row per customer
         entity:
           type: primary
           name: customer
