@@ -2,6 +2,9 @@ saved_queries:
   - name: monthly_orders_by_region
     description: Monthly order count and distinct customer count split by region and nation
     label: Monthly Orders by Region and Nation
+    # config:
+    #   cache: # Declarative, this is useful for optimizing performance for key dashboards or common ad-hoc query requests.
+    #     enabled: false  # Set to true to enable, defaults to false.
     query_params:
       metrics:
         - order_count
