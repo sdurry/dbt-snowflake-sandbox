@@ -1,0 +1,11 @@
+version: 2
+
+metrics:
+  - name: rolling_count_of_orders
+    type: cumulative
+    label: Cumulative Order Count
+    input_metric:
+      name: order_count
+      # filter: "{{ Dimension('entity__dimension') }} > 0"
+      alias: order_count
+    window: 1 month  # Optional: can specify window OR grain_to_date, not both

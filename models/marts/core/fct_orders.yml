@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: fct_orders
-    description: orders fact table
+    description: orders fact table - old
     semantic_model:
       enabled: true
     agg_time_dimension: order_date
@@ -92,7 +92,7 @@ models:
     metrics:
       - name: order_count
         type: simple
-        label: Order Count
+        label: Number of Orders placed
         agg: count
         expr: order_key
       - name: gross_item_sales_amount
