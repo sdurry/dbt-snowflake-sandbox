@@ -9,7 +9,7 @@ models:
     config:
       contract:
         enforced: true
-    tests:
+    data_tests:
       - dbt_utils.recency:
           arguments:
             datepart: day
@@ -95,6 +95,12 @@ models:
         label: Order Count
         agg: count
         expr: order_key
+      - name: monthly_cumulative_order_count
+        type: cumulative
+        label: Monthly Cumulative Order Count
+        description: Running count of orders from the start of each month through the current date.
+        grain_to_date: month
+        input_metric: order_count
       - name: gross_item_sales_amount
         type: simple
         label: Gross Item Sales Amount
@@ -115,3 +121,9 @@ models:
         label: Item Tax Amount
         agg: sum
         expr: item_tax_amount
+      - name: monthly_cumulative_order_count
+        type: cumulative
+        label: Monthly Cumulative Order Count
+        description: Running count of orders from the start of each month through the current date.
+        grain_to_date: month
+        input_metric: order_count
