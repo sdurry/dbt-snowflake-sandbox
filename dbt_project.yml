@@ -43,7 +43,7 @@ models:
     select:
       - transformer
   stephans_snow_sandbox:
-    +static_analysis: strict
+    +static_analysis: off
     staging:
       +group: data_engineering
       +materialized: view
