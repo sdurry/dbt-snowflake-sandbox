@@ -68,6 +68,11 @@ models:
         granularity: day
         dimension:
           type: time
+      - name: my_new_col
+        description: a new col
+        data_type: int
+        dimension:
+          type: categorical
     metrics:
       - name: customer_count
         type: simple
