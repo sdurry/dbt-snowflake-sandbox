@@ -5,3 +5,7 @@ logs/
 dbt_internal_packages/
 
 .vscode
+renders/
+.venv/
+__pycache__/
+*.duckdb
