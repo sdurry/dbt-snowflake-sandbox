@@ -28,7 +28,7 @@ final as (
         nation.name as nation,
         region.name as region,
         customer.phone_number,
-        customer.account_balance,
+        customer.account_balance + 1 as account_balance,
         customer.market_segment,
         sysdate() as last_updated_at
     from
