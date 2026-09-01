@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wizard exec:*)",
+      "Bash(wizard review:*)",
+      "Bash(wizard debug models:*)"
+    ],
+    "deny": [
+      "Bash(wizard system uninstall:*)",
+      "Bash(wizard update:*)",
+      "Bash(wizard providers:*)",
+      "Bash(wizard logout:*)"
+    ]
+  }
+}
