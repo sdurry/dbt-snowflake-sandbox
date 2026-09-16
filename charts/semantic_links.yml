@@ -1,0 +1,85 @@
+# Chart -> semantic-definition registry.
+#
+# Maps each chart in charts/meta.yml back to the dbt metric/model/dimension
+# its SQL is meant to reproduce, and the dbt Cloud Explorer URL for that
+# object. This is a manually maintained convention, not generated or
+# validated automatically — see AGENTS.md ("Linking charts back to semantic
+# definitions") for the rule to keep it in sync.
+#
+# URL shape (account_id/project_id/environment_id come from charts/dbt_cloud.yml):
+#   https://cloud.getdbt.com/deploy/{account_id}/projects/{project_id}/environments/{environment_id}/details/{unique_id}
+#
+# unique_id patterns used below:
+#   model.stephans_snow_sandbox.<model_name>
+#   metric.stephans_snow_sandbox.<metric_name>
+
+revenue_kpi:
+  query: order_kpis
+  semantic_refs:
+    - kind: metric
+      name: net_item_sales_amount
+      model: fct_orders
+      unique_id: metric.stephans_snow_sandbox.net_item_sales_amount
+
+orders_kpi:
+  query: order_kpis
+  semantic_refs:
+    - kind: metric
+      name: order_count
+      model: fct_orders
+      unique_id: metric.stephans_snow_sandbox.order_count
+
+aov_kpi:
+  query: order_kpis
+  semantic_refs:
+    - kind: derived
+      name: avg_order_value
+      note: >
+        net_sales / order_count computed in-query. No standalone metric is
+        declared for this ratio in fct_orders.yml yet — if one is added
+        there, replace this entry with a metric reference.
+      # No metric/model unique_id yet — see note above.
+
+revenue_trend:
+  query: monthly_revenue
+  semantic_refs:
+    - kind: metric
+      name: net_item_sales_amount
+      model: fct_orders
+      unique_id: metric.stephans_snow_sandbox.net_item_sales_amount
+    - kind: model
+      name: fct_orders
+      note: source of the order_date time dimension (month)
+      unique_id: model.stephans_snow_sandbox.fct_orders
+
+status_split:
+  query: status_breakdown
+  semantic_refs:
+    - kind: metric
+      name: order_count
+      model: fct_orders
+      unique_id: metric.stephans_snow_sandbox.order_count
+    - kind: metric
+      name: net_item_sales_amount
+      model: fct_orders
+      unique_id: metric.stephans_snow_sandbox.net_item_sales_amount
+    - kind: model
+      name: fct_orders
+      note: source of the status_code categorical dimension
+      unique_id: model.stephans_snow_sandbox.fct_orders
+
+region_split:
+  query: region_breakdown
+  semantic_refs:
+    - kind: metric
+      name: order_count
+      model: fct_orders
+      unique_id: metric.stephans_snow_sandbox.order_count
+    - kind: metric
+      name: net_item_sales_amount
+      model: fct_orders
+      unique_id: metric.stephans_snow_sandbox.net_item_sales_amount
+    - kind: model
+      name: dim_customers
+      note: source of the region categorical dimension
+      unique_id: model.stephans_snow_sandbox.dim_customers

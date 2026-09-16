@@ -96,6 +96,27 @@ Project macros live in `macros/`. Reuse them instead of re-implementing:
   `.yml` files (see `dim_customers.yml`) and `semantic_datasets/`. When you add a
   dimension/measure to a model, wire it into the semantic config too.
 
+### Linking charts back to semantic definitions
+
+Charts under `charts/` (`meta.yml`, `dashboard.yml`) write inline SQL against
+raw table/column names — they don't `ref()` a model or query the Semantic
+Layer (dbt charts doesn't support querying the SL by metric name yet). To keep
+a chart traceable back to the metric/model it's meant to reproduce:
+
+- `charts/semantic_links.yml` maps each chart to the metric(s)/model(s) it
+  draws on and their dbt Cloud Explorer `unique_id`. `charts/dbt_cloud.yml`
+  holds the account/project/environment IDs used to build those URLs.
+- Each chart in `charts/dashboard.yml` has a matching markdown `text:` block
+  (see dct's [content blocks](https://docs.dbtcharts.com/boards/content/))
+  rendering those links, using the URL shape documented in
+  `charts/dbt_cloud.yml`.
+- **This is manually maintained, not generated or enforced.** When you add or
+  change a chart's SQL, or rename/remove a metric it depends on, update both
+  `charts/semantic_links.yml` and the `text:` block in `dashboard.yml` in the
+  same edit — nothing else will catch the drift. If a chart aggregates a
+  column with no declared metric yet, record that explicitly (see the
+  `aov_kpi` entry in `semantic_links.yml`) instead of inventing a link.
+
 ## Working with the warehouse (use the MCP server)
 
 This project is connected to the **dbt MCP server** (`dbt-snowflake-sandbox`).
