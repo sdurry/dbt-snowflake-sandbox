@@ -16,3 +16,19 @@ exposures:
     owner:
       name: Stephan
       email: stephan@dbtlabs.com
+
+  - name: order_performance
+    type: dashboard
+    maturity: high # In Production
+    url: https://dbtcharts.com/stephan-s-sandbox/dbt-snowflake-sandbox/d/dashboard
+    description:
+      Order Performance dashboard — TPC-H order KPIs, monthly revenue trend,
+      and breakdowns by status and region.
+
+    depends_on:
+      - ref('fct_orders')
+      - ref('dim_customers')
+
+    owner:
+      name: Stephan
+      email: stephan.durry@fivetran.com
