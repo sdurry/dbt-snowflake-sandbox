@@ -104,10 +104,11 @@ charts:
   revenue_trend:
     type: line
     query: monthly_revenue
-    title: Monthly Net Sales
-    notes: Monthly net sales trend for the selected region.
+    title: Monthly Net Sales by Region
+    notes: Monthly net sales shown as a separate trend series for each customer region.
     x: month
     y: net_sales
+    color: region
     style:
       axis_y:
         labels:
