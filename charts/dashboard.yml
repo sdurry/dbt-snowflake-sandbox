@@ -1,28 +1,14 @@
 title: "Order Performance"
-notes: "TPC-H order KPIs, trend, and breakdowns by status and region."
-source: analytics
-queries:
-  monthly_revenue_by_region:
-    notes: "Monthly net sales by customer region for comparing regional trends."
-    sql: |
-      SELECT
-        DATE_TRUNC('month', o.order_date) AS month,
-        c.region AS region,
-        SUM(o.net_item_sales_amount) AS net_sales
-      FROM fct_orders o
-      JOIN dim_customers c ON o.customer_key = c.customer_key
-      GROUP BY 1, 2
-      ORDER BY 1, 2
-charts:
-  revenue_trend:
-    type: line
-    query: monthly_revenue_by_region
-    title: "Monthly Net Sales by Region"
-    notes: "Monthly net sales split into a separate series for each customer region."
-    x: month
-    y: net_sales
-    color: region
-    style:
-      number_format: currency
+notes: >
+  TPC-H order KPIs, trend, and breakdowns by status and region. The region
+  filter (from charts/meta.yml) narrows the KPI row, trend, and status split
+  together; the region breakdown at the bottom stays constant as the
+  all-regions baseline.
+
 rows:
-  - revenue_trend
+  - cols: [revenue_kpi, orders_kpi, aov_kpi]
+  - cols:
+      - width: "60%"
+        rows: [revenue_trend]
+      - rows: [status_split]
+  - region_split
