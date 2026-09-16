@@ -1,0 +1,142 @@
+# Shared defaults for every board under charts/ — a *partial board* with no
+# layout of its own. `dashboard.yml` and each per-chart preview file below
+# inherit this source, variable, and every query/chart defined here. Edit a
+# query or chart here and every board that renders it picks up the change.
+
+source: analytics
+
+variables:
+  region:
+    input: select
+    label: "Region"
+    notes: "Restricts the KPI row, trend, and status breakdown. region_split stays unfiltered as the all-regions baseline."
+    options:
+      static: [All, AFRICA, AMERICA, ASIA, EUROPE, MIDDLE EAST]
+    default: All
+
+queries:
+  order_kpis:
+    notes: Single-row headline for the KPI row — net sales, order count, average order value, filtered by region.
+    sql: |
+      SELECT
+        SUM(o.net_item_sales_amount) AS net_sales,
+        COUNT(*) AS order_count,
+        SUM(o.net_item_sales_amount) / COUNT(*) AS avg_order_value
+      FROM fct_orders o
+      JOIN dim_customers c ON o.customer_key = c.customer_key
+      {% if region and region != 'All' %}
+      WHERE {{ filter('c.region', region) }}
+      {% endif %}
+
+  monthly_revenue:
+    notes: Net sales by order month — the trend series, filtered by region.
+    sql: |
+      SELECT
+        DATE_TRUNC('month', o.order_date) AS month,
+        SUM(o.net_item_sales_amount) AS net_sales
+      FROM fct_orders o
+      JOIN dim_customers c ON o.customer_key = c.customer_key
+      {% if region and region != 'All' %}
+      WHERE {{ filter('c.region', region) }}
+      {% endif %}
+      GROUP BY 1
+      ORDER BY 1
+
+  status_breakdown:
+    notes: Net sales and order count by order status, filtered by region.
+    sql: |
+      SELECT
+        CASE o.status_code
+          WHEN 'F' THEN 'Fulfilled'
+          WHEN 'O' THEN 'Open'
+          WHEN 'P' THEN 'Pending'
+          ELSE o.status_code
+        END AS status,
+        COUNT(*) AS order_count,
+        SUM(o.net_item_sales_amount) AS net_sales
+      FROM fct_orders o
+      JOIN dim_customers c ON o.customer_key = c.customer_key
+      {% if region and region != 'All' %}
+      WHERE {{ filter('c.region', region) }}
+      {% endif %}
+      GROUP BY 1
+      ORDER BY 1
+
+  region_breakdown:
+    notes: Net sales and order count by customer region — deliberately unfiltered, the all-regions comparison view.
+    ignore: [WARN-FANOUT-RISK]  # verified: dim_customers.customer_key is unique, join is order:customer N:1
+    sql: |
+      SELECT
+        c.region AS region,
+        COUNT(*) AS order_count,
+        SUM(o.net_item_sales_amount) AS net_sales
+      FROM fct_orders o
+      JOIN dim_customers c ON o.customer_key = c.customer_key
+      GROUP BY 1
+      ORDER BY 1
+
+charts:
+  revenue_kpi:
+    type: kpi
+    query: order_kpis
+    label: Net Sales
+    value: net_sales
+    notes: Headline net sales for the selected region.
+    style:
+      value:
+        format: currency
+
+  orders_kpi:
+    type: kpi
+    query: order_kpis
+    label: Orders
+    value: order_count
+    notes: Headline order count for the selected region.
+
+  aov_kpi:
+    type: kpi
+    query: order_kpis
+    label: Avg Order Value
+    value: avg_order_value
+    notes: Net sales divided by order count for the selected region.
+    style:
+      value:
+        format: currency_full
+
+  revenue_trend:
+    type: line
+    query: monthly_revenue
+    title: Monthly Net Sales
+    notes: Monthly net sales trend for the selected region.
+    x: month
+    y: net_sales
+    style:
+      axis_y:
+        labels:
+          format: "$,.3~s"
+
+  status_split:
+    type: bar
+    query: status_breakdown
+    title: Net Sales by Status
+    notes: Net sales split by order status for the selected region.
+    x: status
+    y: net_sales
+    color: status
+    style:
+      orientation: horizontal
+      axis_y:
+        labels:
+          format: "$,.3~s"
+
+  region_split:
+    type: bar
+    query: region_breakdown
+    title: Net Sales by Region
+    notes: Net sales split by customer region across all orders, unaffected by the region filter.
+    x: region
+    y: net_sales
+    style:
+      axis_y:
+        labels:
+          format: "$,.3~s"

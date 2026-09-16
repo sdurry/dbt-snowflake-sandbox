@@ -1,0 +1,14 @@
+title: "Order Performance"
+notes: >
+  TPC-H order KPIs, trend, and breakdowns by status and region. The region
+  filter (from charts/meta.yml) narrows the KPI row, trend, and status split
+  together; the region breakdown at the bottom stays constant as the
+  all-regions baseline.
+
+rows:
+  - cols: [revenue_kpi, orders_kpi, aov_kpi]
+  - cols:
+      - width: "60%"
+        rows: [revenue_trend]
+      - rows: [status_split]
+  - region_split
