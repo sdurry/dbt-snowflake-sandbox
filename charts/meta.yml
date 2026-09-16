@@ -29,18 +29,16 @@ queries:
       {% endif %}
 
   monthly_revenue:
-    notes: Net sales by order month — the trend series, filtered by region.
+    notes: Net sales by order month and customer region — one trend series per region.
     sql: |
       SELECT
         DATE_TRUNC('month', o.order_date) AS month,
+        c.region AS region,
         SUM(o.net_item_sales_amount) AS net_sales
       FROM fct_orders o
       JOIN dim_customers c ON o.customer_key = c.customer_key
-      {% if region and region != 'All' %}
-      WHERE {{ filter('c.region', region) }}
-      {% endif %}
-      GROUP BY 1
-      ORDER BY 1
+      GROUP BY 1, 2
+      ORDER BY 1, 2
 
   status_breakdown:
     notes: Net sales and order count by order status, filtered by region.
