@@ -1,3 +1,4 @@
+theme: "clarity"
 # Shared defaults for every board under charts/ — a *partial board* with no
 # layout of its own. `dashboard.yml` and each per-chart preview file below
 # inherit this source, variable, and every query/chart defined here. Edit a
