@@ -1,4 +1,5 @@
 title: "Order Performance"
+theme: dbt_summit_theme
 notes: >
   TPC-H order KPIs, trend, and breakdowns by status and region. The region
   filter (from charts/meta.yml) narrows the KPI row, trend, and status split
