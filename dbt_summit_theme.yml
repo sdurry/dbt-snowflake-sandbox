@@ -1,0 +1,79 @@
+# Theme: dbt_summit
+# On-brand palette for presenting these boards at dbt Summit — dbt orange
+# accent, charcoal ink, clean white canvas. Extends `stark` (not `clarity`)
+# so every color/font below is set explicitly rather than inherited from
+# clarity's steel-blue/serif editorial voice.
+
+extends: stark
+style:
+  background: "#FFFFFF"
+  muted: "#F5F1EC"
+  accent: "#FF694A"          # dbt orange
+
+  font:
+    family: &font_sans '''Inter Variable'', Inter, system-ui, sans-serif'
+    color: &color_ink "#2C2A36"          # charcoal
+
+  border:
+    color: "#E4DFD8"
+
+  title:
+    font:
+      family: *font_sans
+      color: *color_ink
+    subtitle:
+      font:
+        color: "#6B6874"
+
+  charts:
+    color:
+      categorical:
+        palette:
+          - "#FF694A"   # dbt orange (primary)
+          - "#2C2A36"   # charcoal
+          - "#3B7A57"   # green
+          - "#F2A93B"   # gold
+          - "#5B6B8C"   # slate blue
+          - "#C65146"   # muted rose
+        single_series_palette: ["#FF694A"]
+
+    axis:
+      line:
+        color: "#E4DFD8"
+      ticks:
+        color: "#E4DFD8"
+      grid:
+        color: "#EEE9E2"
+      labels:
+        font:
+          color: "#6B6874"
+      title:
+        font:
+          color: "#6B6874"
+
+    legend:
+      label:
+        font:
+          color: "#6B6874"
+      title:
+        font:
+          color: *color_ink
+
+    kpi:
+      value:
+        font:
+          color: *color_ink
+      label:
+        font:
+          color: "#6B6874"
+
+    tooltip:
+      background: "#2C2A36"
+      label:
+        font:
+          color: "#D8D5DE"
+      value:
+        font:
+          color: "#FFFFFF"
+      border:
+        color: "#FF694A"
