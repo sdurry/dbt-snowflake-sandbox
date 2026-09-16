@@ -5,7 +5,21 @@ notes: >
   together; the region breakdown at the bottom stays constant as the
   all-regions baseline.
 
+  The Data Health row links out to dbt's Explorer health tile
+  (https://docs.getdbt.com/docs/explore/data-tile) for the order_performance
+  exposure. A true *embed* was prototyped and ruled out: dbt charts strips
+  `<iframe>`/`<script>`/`<object>`/`<embed>` tags from `text:` blocks even
+  with `html_policy: trusted-raw` (confirmed empirically — only inline
+  styling tags and `<img>` survive), so the health tile's iframe snippet
+  can never render inside a board. Linking to it is the working fallback.
+  Once `charts/dbt_cloud.yml`'s account_id/project_id/environment_id are
+  filled in, replace `<TODO>` below with the real values (same convention
+  as the semantic-definition links further down this board).
+
 rows:
+  - text: |
+      ### Data Health
+      🩺 [View data health for this exposure](https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/catalog/exposures/order_performance) in dbt Explorer — freshness, test results, and upstream model health.
   - cols: [revenue_kpi, orders_kpi, aov_kpi]
   - text: |
       📎 Semantic definitions: [net_item_sales_amount](https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/details/metric.stephans_snow_sandbox.net_item_sales_amount) · [order_count](https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/details/metric.stephans_snow_sandbox.order_count) · avg_order_value (no metric declared yet — see charts/semantic_links.yml)
