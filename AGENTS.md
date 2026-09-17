@@ -128,8 +128,8 @@ a chart traceable back to the metric/model it's meant to reproduce:
 - The dashboard's own **exposure** (`order_performance` in
   `models/viz/exposures.yml`) has a dbt Catalog "exposure tile" showing its
   live freshness/health — a metadata-service URL, not a metric page. Its
-  status link sits in a `text:` markdown block at the bottom of
-  `dashboard.yml` (`[Exposure status: order_performance](...)`), not a
+  status link sits in a `text:` markdown block alongside the top KPI row in
+  `dashboard.yml` (`🔗 [Data Health](...)`), not a
   chart `link:`, since this is board-level, not tied to one chart's plotted
   value.
   - **We tried embedding it as a live `<iframe>`** (dct's `text:` supports raw
