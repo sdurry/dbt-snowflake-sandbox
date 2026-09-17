@@ -1,8 +1,8 @@
 # Chart -> semantic-definition registry.
 #
 # Maps each chart in charts/meta.yml back to the dbt metric/model/dimension
-# its SQL is meant to reproduce, and the dbt Cloud Explorer URL for that
-# object. This is a manually maintained convention, not generated or
+# its SQL is meant to reproduce, and the dbt Catalog URL for that object.
+# This is a manually maintained convention, not generated or
 # validated automatically — see AGENTS.md ("Linking charts back to semantic
 # definitions") for the rule to keep it in sync.
 #
@@ -13,9 +13,9 @@
 # / value actually plots. The other refs below (dimensions, source models)
 # aren't clickable on the board itself — this file is their only record.
 #
-# URL shape (host/account_id/project_id/environment_id come from charts/dbt_explorer.yml):
+# URL shape (host/account_id/project_id/environment_id come from charts/dbt_catalog.yml):
 #   https://{host}/explore/{account_id}/projects/{project_id}/environments/{environment_id}/details/{unique_id}
-# e.g. https://pp569.eu1.dbt.com/explore/180/projects/3588/environments/staging/details/{unique_id}
+# e.g. https://pp569.eu1.dbt.com/explore/180/projects/3588/environments/6605/details/{unique_id}
 #
 # unique_id patterns used below:
 #   model.stephans_snow_sandbox.<model_name>

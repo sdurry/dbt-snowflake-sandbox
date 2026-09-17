@@ -104,14 +104,14 @@ Layer (dbt charts doesn't support querying the SL by metric name yet). To keep
 a chart traceable back to the metric/model it's meant to reproduce:
 
 - `charts/semantic_links.yml` maps each chart to the metric(s)/model(s)/
-  dimension(s) it draws on and their dbt Cloud Explorer `unique_id`.
-  `charts/dbt_explorer.yml` holds the account/project/environment IDs used to
+  dimension(s) it draws on and their dbt Catalog `unique_id`.
+  `charts/dbt_catalog.yml` holds the account/project/environment IDs used to
   build those URLs.
 - The metric a chart actually plots (its `linked: true` entry in
   `semantic_links.yml`) is wired up as that chart's own `link:` field in
   `charts/meta.yml` — dct's cell-level hyperlink config (see `dct docs
   reference -s link`). Clicking the chart's rendered numbers opens the
-  metric's Explorer page directly; no separate text/markdown block is used.
+  metric's dbt Catalog page directly; no separate text/markdown block is used.
   A `link:` is a single URL per chart, so charts that draw on more than one
   semantic object (e.g. a plotted metric plus the model behind an axis
   dimension) only link the plotted one — the rest stay recorded in
