@@ -1,0 +1,8 @@
+title: "Country Sales Map (standalone preview)"
+notes: >
+  Standalone preview of the country_sales_map chart defined in charts/meta.yml.
+  Edit that chart or its country_breakdown query and re-render this file (or
+  charts/dashboard.yml) to see the change in isolation before it lands on
+  the full dashboard.
+
+chart_focus: country_sales_map

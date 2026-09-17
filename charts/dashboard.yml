@@ -1,38 +1,26 @@
 title: "Order Performance"
+theme: dbt_summit_theme
 notes: >
-  TPC-H order KPIs, trend, and breakdowns by status and region. The region
-  filter (from charts/meta.yml) narrows the KPI row, trend, and status split
-  together; the region breakdown at the bottom stays constant as the
-  all-regions baseline.
-
-  The Data Health row links out to dbt's Explorer health tile
-  (https://docs.getdbt.com/docs/explore/data-tile) for the order_performance
-  exposure. A true *embed* was prototyped and ruled out: dbt charts strips
-  `<iframe>`/`<script>`/`<object>`/`<embed>` tags from `text:` blocks even
-  with `html_policy: trusted-raw` (confirmed empirically — only inline
-  styling tags and `<img>` survive), so the health tile's iframe snippet
-  can never render inside a board. Linking to it is the working fallback.
-  Once `charts/dbt_cloud.yml`'s account_id/project_id/environment_id are
-  filled in, replace `<TODO>` below with the real values (same convention
-  as the semantic-definition links further down this board).
+  TPC-H order KPIs, a monthly net sales trend broken down by status, and
+  breakdowns by region and country. The region filter (from charts/meta.yml)
+  narrows the KPI row, trend, and country map together; the region_split
+  chart at the bottom stays constant as the all-regions, all-time baseline.
 
 rows:
-  - text: |
-      ### Data Health
-      🩺 [View data health for this exposure](https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/catalog/exposures/order_performance) in dbt Explorer — freshness, test results, and upstream model health.
-  - cols: [revenue_kpi, orders_kpi, aov_kpi]
-  - text: |
-      📎 Semantic definitions: [net_item_sales_amount](https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/details/metric.stephans_snow_sandbox.net_item_sales_amount) · [order_count](https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/details/metric.stephans_snow_sandbox.order_count) · avg_order_value (no metric declared yet — see charts/semantic_links.yml)
+  - cols:
+      - revenue_kpi
+      - orders_kpi
+      - aov_kpi
+      - text: "🔗 [Data Health](https://pp569.metadata.eu1.dbt.com/exposure-tile?uniqueId=exposure.stephans_snow_sandbox.order_performance&environmentType=staging&environmentId=6605&token={{ tile_token }})"
+        notes: >
+          dbt Catalog's live freshness/health tile for this dashboard's own
+          exposure (order_performance, models/viz/exposures.yml). tile_token
+          (charts/meta.yml) is never given a real default; pass it at
+          render/serve time (?tile_token=<token> on this URL, or dct render
+          --var tile_token=<token>). See AGENTS.md.
   - cols:
       - width: "60%"
-        rows:
-          - revenue_trend
-          - text: |
-              📎 Semantic definitions: [net_item_sales_amount](https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/details/metric.stephans_snow_sandbox.net_item_sales_amount) · [fct_orders](https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/details/model.stephans_snow_sandbox.fct_orders)
-      - rows:
-          - status_split
-          - text: |
-              📎 Semantic definitions: [order_count](https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/details/metric.stephans_snow_sandbox.order_count) · [net_item_sales_amount](https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/details/metric.stephans_snow_sandbox.net_item_sales_amount) · [fct_orders](https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/details/model.stephans_snow_sandbox.fct_orders)
-  - region_split
-  - text: |
-      📎 Semantic definitions: [order_count](https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/details/metric.stephans_snow_sandbox.order_count) · [net_item_sales_amount](https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/details/metric.stephans_snow_sandbox.net_item_sales_amount) · [dim_customers](https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/details/model.stephans_snow_sandbox.dim_customers)
+        rows: [revenue_trend]
+      - width: "40%"
+        rows: [region_split]
+  - country_sales_map

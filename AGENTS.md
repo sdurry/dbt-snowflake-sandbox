@@ -103,19 +103,51 @@ raw table/column names — they don't `ref()` a model or query the Semantic
 Layer (dbt charts doesn't support querying the SL by metric name yet). To keep
 a chart traceable back to the metric/model it's meant to reproduce:
 
-- `charts/semantic_links.yml` maps each chart to the metric(s)/model(s) it
-  draws on and their dbt Cloud Explorer `unique_id`. `charts/dbt_cloud.yml`
-  holds the account/project/environment IDs used to build those URLs.
-- Each chart in `charts/dashboard.yml` has a matching markdown `text:` block
-  (see dct's [content blocks](https://docs.dbtcharts.com/boards/content/))
-  rendering those links, using the URL shape documented in
-  `charts/dbt_cloud.yml`.
+- `charts/semantic_links.yml` maps each chart to the metric(s)/model(s)/
+  dimension(s) it draws on and their dbt Catalog `unique_id`.
+  `charts/dbt_catalog.yml` holds the account/project/environment IDs used to
+  build those URLs.
+- The metric a chart actually plots (its `linked: true` entry in
+  `semantic_links.yml`) is wired up as that chart's own `link:` field in
+  `charts/meta.yml` — dct's cell-level hyperlink config (see `dct docs
+  reference -s link`). Clicking the chart's rendered numbers opens the
+  metric's dbt Catalog page directly; no separate text/markdown block is used.
+  A `link:` is a single URL per chart, so charts that draw on more than one
+  semantic object (e.g. a plotted metric plus the model behind an axis
+  dimension) only link the plotted one — the rest stay recorded in
+  `semantic_links.yml` but aren't independently clickable on the board.
+  Repeated URLs are written once as a YAML anchor (`&name`) in `meta.yml` and
+  reused via alias (`*name`) rather than copy-pasted per chart.
 - **This is manually maintained, not generated or enforced.** When you add or
-  change a chart's SQL, or rename/remove a metric it depends on, update both
-  `charts/semantic_links.yml` and the `text:` block in `dashboard.yml` in the
-  same edit — nothing else will catch the drift. If a chart aggregates a
-  column with no declared metric yet, record that explicitly (see the
-  `aov_kpi` entry in `semantic_links.yml`) instead of inventing a link.
+  change a chart's SQL, change what it plots, or rename/remove a metric it
+  depends on, update both `charts/semantic_links.yml` and the chart's `link:`
+  field in `meta.yml` in the same edit — nothing else will catch the drift.
+  If a chart aggregates a column with no declared metric yet, record that
+  explicitly (see the `aov_kpi` entry in `semantic_links.yml`) and leave its
+  `link:` field off rather than inventing one.
+- The dashboard's own **exposure** (`order_performance` in
+  `models/viz/exposures.yml`) has a dbt Catalog "exposure tile" showing its
+  live freshness/health — a metadata-service URL, not a metric page. Its
+  status link sits in a `text:` markdown block alongside the top KPI row in
+  `dashboard.yml` (`🔗 [Data Health](...)`), not a
+  chart `link:`, since this is board-level, not tied to one chart's plotted
+  value.
+  - **We tried embedding it as a live `<iframe>`** (dct's `text:` supports raw
+    HTML via `html_policy: trusted-raw`) **and it doesn't work**: dct's
+    sanitizer silently strips `<iframe>` tags even under `trusted-raw` —
+    confirmed by direct render testing, and not documented anywhere (the
+    docs only call out `<script>`/event-handlers as stripped). `<img>` tags
+    do survive the sanitizer, so a static badge/image variant of the tile
+    would work if the metadata service ever offers one; a live iframe won't,
+    as of this dct version.
+  - The URL carries a **token query param** — a live, if read-only,
+    credential. It is never hardcoded: `tile_token` (a `visible: false`
+    variable in `meta.yml`, default always `""`) is the only place it's
+    referenced (`{{ tile_token }}`), and the real value is supplied only at
+    render/serve time — `dct serve` then open `/dashboard/?tile_token=<token>`
+    (dct docs: URL query params become board variables), or `dct render --var
+    tile_token=<token>` for a one-off export. Never put the real token in
+    `meta.yml`'s `default:` or anywhere else that gets committed.
 
 ## Working with the warehouse (use the MCP server)
 

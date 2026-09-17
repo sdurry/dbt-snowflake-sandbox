@@ -1,0 +1,22 @@
+# dbt Catalog coordinates used to build the semantic-definition links
+# referenced from charts/semantic_links.yml and charts/meta.yml.
+#
+# (Named dbt_catalog.yml, not dbt_cloud.yml — that filename is already a
+# dbt Cloud CLI concept, unrelated to this chart-linking convention. "dbt
+# Catalog" is the current name for what used to be called dbt Explorer.)
+#
+# Resource URL shape:
+#   https://{host}/explore/{account_id}/projects/{project_id}/environments/{environment_id}/details/{unique_id}
+# (the /explore/ path segment is legacy naming that dbt Cloud still serves —
+# it isn't something this project renamed)
+# where {unique_id} is one of:
+#   model.stephans_snow_sandbox.<model_name>
+#   metric.stephans_snow_sandbox.<metric_name>
+#
+# host is account-specific (multi-cell/multi-region dbt Cloud), not the
+# generic cloud.getdbt.com — read it off any dbt Catalog URL from this account.
+
+host: pp569.eu1.dbt.com
+account_id: "180"
+project_id: "3588"
+environment_id: "6605"
