@@ -26,9 +26,17 @@ variables:
       --var tile_token=<token>), never as this default. See AGENTS.md
       ("Linking charts back to semantic definitions").
 
+  time_range:
+    input: select
+    label: "Time Range"
+    notes: "Restricts the KPI row, trend, and status breakdown to a rolling window ending at the most recent order date (not wall-clock today — this is static historical data). region_split stays unfiltered as the all-time baseline, same convention as the region filter."
+    options:
+      static: ["Last 12 Months", "Last 24 Months", "Last 36 Months", "All Time"]
+    default: "Last 24 Months"
+
 queries:
   order_kpis:
-    notes: Single-row headline for the KPI row — net sales, order count, average order value, filtered by region.
+    notes: Single-row headline for the KPI row — net sales, order count, average order value, filtered by region and time range.
     sql: |
       SELECT
         SUM(o.net_item_sales_amount) AS net_sales,
@@ -36,26 +44,48 @@ queries:
         SUM(o.net_item_sales_amount) / COUNT(*) AS avg_order_value
       FROM fct_orders o
       JOIN dim_customers c ON o.customer_key = c.customer_key
+      WHERE 1=1
       {% if region and region != 'All' %}
-      WHERE {{ filter('c.region', region) }}
+        AND {{ filter('c.region', region) }}
+      {% endif %}
+      {% if time_range and time_range != 'All Time' %}
+        AND o.order_date >= (
+          SELECT CASE {{ time_range }}
+            WHEN 'Last 12 Months' THEN DATEADD('month', -12, MAX(order_date))
+            WHEN 'Last 24 Months' THEN DATEADD('month', -24, MAX(order_date))
+            WHEN 'Last 36 Months' THEN DATEADD('month', -36, MAX(order_date))
+          END
+          FROM fct_orders
+        )
       {% endif %}
 
   monthly_revenue:
-    notes: Net sales by order month — the trend series, filtered by region.
+    notes: Net sales by order month — the trend series, filtered by region and time range.
     sql: |
       SELECT
         DATE_TRUNC('month', o.order_date) AS month,
         SUM(o.net_item_sales_amount) AS net_sales
       FROM fct_orders o
       JOIN dim_customers c ON o.customer_key = c.customer_key
+      WHERE 1=1
       {% if region and region != 'All' %}
-      WHERE {{ filter('c.region', region) }}
+        AND {{ filter('c.region', region) }}
+      {% endif %}
+      {% if time_range and time_range != 'All Time' %}
+        AND o.order_date >= (
+          SELECT CASE {{ time_range }}
+            WHEN 'Last 12 Months' THEN DATEADD('month', -12, MAX(order_date))
+            WHEN 'Last 24 Months' THEN DATEADD('month', -24, MAX(order_date))
+            WHEN 'Last 36 Months' THEN DATEADD('month', -36, MAX(order_date))
+          END
+          FROM fct_orders
+        )
       {% endif %}
       GROUP BY 1
       ORDER BY 1
 
   status_breakdown:
-    notes: Net sales and order count by order status, filtered by region.
+    notes: Net sales and order count by order status, filtered by region and time range.
     sql: |
       SELECT
         CASE o.status_code
@@ -68,14 +98,25 @@ queries:
         SUM(o.net_item_sales_amount) AS net_sales
       FROM fct_orders o
       JOIN dim_customers c ON o.customer_key = c.customer_key
+      WHERE 1=1
       {% if region and region != 'All' %}
-      WHERE {{ filter('c.region', region) }}
+        AND {{ filter('c.region', region) }}
+      {% endif %}
+      {% if time_range and time_range != 'All Time' %}
+        AND o.order_date >= (
+          SELECT CASE {{ time_range }}
+            WHEN 'Last 12 Months' THEN DATEADD('month', -12, MAX(order_date))
+            WHEN 'Last 24 Months' THEN DATEADD('month', -24, MAX(order_date))
+            WHEN 'Last 36 Months' THEN DATEADD('month', -36, MAX(order_date))
+          END
+          FROM fct_orders
+        )
       {% endif %}
       GROUP BY 1
       ORDER BY 1
 
   region_breakdown:
-    notes: Net sales and order count by customer region — deliberately unfiltered, the all-regions comparison view.
+    notes: Net sales and order count by customer region — deliberately unfiltered, the all-regions, all-time comparison view.
     ignore: [WARN-FANOUT-RISK]  # verified: dim_customers.customer_key is unique, join is order:customer N:1
     sql: |
       SELECT
@@ -129,6 +170,12 @@ charts:
     y: net_sales
     link: *net_item_sales_amount_link
     style:
+      title:
+        # dbt_summit_theme sets the board title (Bugrino); chart-card titles
+        # always inherit that same family from the engine, so pin the body
+        # sans here per-chart to keep chart titles on Inter.
+        font:
+          family: '''Inter Variable'', Inter, system-ui, sans-serif'
       axis_y:
         labels:
           format: "$,.3~s"
@@ -144,6 +191,9 @@ charts:
     link: *net_item_sales_amount_link
     style:
       orientation: horizontal
+      title:
+        font:
+          family: '''Inter Variable'', Inter, system-ui, sans-serif'
       axis_y:
         labels:
           format: "$,.3~s"
@@ -152,11 +202,14 @@ charts:
     type: bar
     query: region_breakdown
     title: Net Sales by Region
-    notes: Net sales split by customer region across all orders, unaffected by the region filter.
+    notes: Net sales split by customer region across all orders and all time, unaffected by the region and time range filters.
     x: region
     y: net_sales
     link: *net_item_sales_amount_link
     style:
+      title:
+        font:
+          family: '''Inter Variable'', Inter, system-ui, sans-serif'
       axis_y:
         labels:
           format: "$,.3~s"
