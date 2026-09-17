@@ -125,6 +125,29 @@ a chart traceable back to the metric/model it's meant to reproduce:
   If a chart aggregates a column with no declared metric yet, record that
   explicitly (see the `aov_kpi` entry in `semantic_links.yml`) and leave its
   `link:` field off rather than inventing one.
+- The dashboard's own **exposure** (`order_performance` in
+  `models/viz/exposures.yml`) has a dbt Catalog "exposure tile" showing its
+  live freshness/health — a metadata-service URL, not a metric page. Its
+  status link sits in a `text:` markdown block at the bottom of
+  `dashboard.yml` (`[Exposure status: order_performance](...)`), not a
+  chart `link:`, since this is board-level, not tied to one chart's plotted
+  value.
+  - **We tried embedding it as a live `<iframe>`** (dct's `text:` supports raw
+    HTML via `html_policy: trusted-raw`) **and it doesn't work**: dct's
+    sanitizer silently strips `<iframe>` tags even under `trusted-raw` —
+    confirmed by direct render testing, and not documented anywhere (the
+    docs only call out `<script>`/event-handlers as stripped). `<img>` tags
+    do survive the sanitizer, so a static badge/image variant of the tile
+    would work if the metadata service ever offers one; a live iframe won't,
+    as of this dct version.
+  - The URL carries a **token query param** — a live, if read-only,
+    credential. It is never hardcoded: `tile_token` (a `visible: false`
+    variable in `meta.yml`, default always `""`) is the only place it's
+    referenced (`{{ tile_token }}`), and the real value is supplied only at
+    render/serve time — `dct serve` then open `/dashboard/?tile_token=<token>`
+    (dct docs: URL query params become board variables), or `dct render --var
+    tile_token=<token>` for a one-off export. Never put the real token in
+    `meta.yml`'s `default:` or anywhere else that gets committed.
 
 ## Working with the warehouse (use the MCP server)
 

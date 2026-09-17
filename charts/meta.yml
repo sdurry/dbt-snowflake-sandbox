@@ -14,6 +14,18 @@ variables:
       static: [All, AFRICA, AMERICA, ASIA, EUROPE, MIDDLE EAST]
     default: All
 
+  tile_token:
+    input: text
+    visible: false
+    default: ""
+    notes: >
+      Read-only dbt Catalog metadata-service token for the exposure-status
+      link in dashboard.yml. Deliberately left blank here -- this file is
+      committed to git. Supply the real value only at render/serve time
+      (dct serve, then open /dashboard/?tile_token=<token>; or dct render
+      --var tile_token=<token>), never as this default. See AGENTS.md
+      ("Linking charts back to semantic definitions").
+
 queries:
   order_kpis:
     notes: Single-row headline for the KPI row — net sales, order count, average order value, filtered by region.

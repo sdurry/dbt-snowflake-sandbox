@@ -12,3 +12,10 @@ rows:
         rows: [revenue_trend]
       - rows: [status_split]
   - region_split
+  - text: |
+      🔗 [Exposure status: order_performance](https://pp569.metadata.eu1.dbt.com/exposure-tile?uniqueId=exposure.stephans_snow_sandbox.order_performance&environmentType=staging&environmentId=6605&token={{ tile_token }})
+      — dbt Catalog's live freshness/health tile for this dashboard's
+      exposure (models/viz/exposures.yml). tile_token (charts/meta.yml) is
+      never given a real default; pass it at render/serve time
+      (?tile_token=<token> on this URL, or dct render --var
+      tile_token=<token>). See AGENTS.md.
