@@ -13,7 +13,12 @@
 extends: stark
 style:
   background: "#000000"
-  muted: "#151517"          # secondary surface (table stripes, fills)
+  # Muted secondary-TEXT color (KPI support rows, table/spark subtitles) --
+  # not a background/surface token despite the name. Was set to #151517
+  # (near-black), which is illegible as text against this theme's black
+  # canvas; matches the warm gray already used for axis/legend/kpi-label
+  # text elsewhere in this file.
+  muted: "#9A948A"
   accent: "#FF694A"          # dbt orange
 
   font:
