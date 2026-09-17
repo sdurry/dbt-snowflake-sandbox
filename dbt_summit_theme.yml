@@ -18,14 +18,34 @@ style:
     color: "#E4DFD8"
 
   title:
+    # dbt Summit's own display face, falling back to the body sans if Bugrino
+    # isn't installed/embeddable (no @font-face support in the render
+    # pipeline today; see dct docs errors ERR-FORMAT-CONVERSION-FAILED).
+    #
+    # Only takes effect on a "prose" board (>=100 words of board-level text —
+    # see dct's board_is_prose/title_font_family): a dashboard-style board's
+    # page title always renders in the body font regardless of this setting.
+    # charts/dashboard.yml is a dashboard, so today this only reaches a
+    # future narrative-report board built on this theme; per-chart card
+    # titles are pinned back to the body sans in charts/meta.yml so they
+    # don't pick this up at medium/wide card widths.
     font:
-      family: *font_sans
+      family: &font_display '''Bugrino'', ''Inter Variable'', Inter, system-ui, sans-serif'
       color: *color_ink
     subtitle:
       font:
         color: "#6B6874"
 
   charts:
+    # On-chart annotations — direct value/endpoint labels drawn on marks
+    # (bar/line/point labels) — read a monospace face, distinct from titles
+    # and axis/legend chrome.
+    marks:
+      text:
+        font:
+          family: &font_mono '''IBM Plex Mono'', ''SFMono-Regular'', Menlo, Consolas, monospace'
+          color: *color_ink
+
     color:
       categorical:
         palette:

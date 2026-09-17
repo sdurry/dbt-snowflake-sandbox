@@ -129,6 +129,12 @@ charts:
     y: net_sales
     link: *net_item_sales_amount_link
     style:
+      title:
+        # dbt_summit_theme sets the board title (Bugrino); chart-card titles
+        # always inherit that same family from the engine, so pin the body
+        # sans here per-chart to keep chart titles on Inter.
+        font:
+          family: '''Inter Variable'', Inter, system-ui, sans-serif'
       axis_y:
         labels:
           format: "$,.3~s"
@@ -144,6 +150,9 @@ charts:
     link: *net_item_sales_amount_link
     style:
       orientation: horizontal
+      title:
+        font:
+          family: '''Inter Variable'', Inter, system-ui, sans-serif'
       axis_y:
         labels:
           format: "$,.3~s"
@@ -157,6 +166,9 @@ charts:
     y: net_sales
     link: *net_item_sales_amount_link
     style:
+      title:
+        font:
+          family: '''Inter Variable'', Inter, system-ui, sans-serif'
       axis_y:
         labels:
           format: "$,.3~s"
