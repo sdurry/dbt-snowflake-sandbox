@@ -105,7 +105,7 @@ a chart traceable back to the metric/model it's meant to reproduce:
 
 - `charts/semantic_links.yml` maps each chart to the metric(s)/model(s)/
   dimension(s) it draws on and their dbt Cloud Explorer `unique_id`.
-  `charts/dbt_cloud.yml` holds the account/project/environment IDs used to
+  `charts/dbt_explorer.yml` holds the account/project/environment IDs used to
   build those URLs.
 - The metric a chart actually plots (its `linked: true` entry in
   `semantic_links.yml`) is wired up as that chart's own `link:` field in
