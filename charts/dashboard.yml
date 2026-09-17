@@ -1,10 +1,10 @@
 title: "Order Performance"
 theme: dbt_summit_theme
 notes: >
-  TPC-H order KPIs, a monthly net sales trend broken down by status, and a
-  country-level net sales map. The region and time_range filters (from
-  charts/meta.yml) narrow the KPI row, trend chart, and map together — none
-  of this board's charts stay unfiltered.
+  TPC-H order KPIs, a monthly net sales trend broken down by status, and
+  breakdowns by region and country. The region filter (from charts/meta.yml)
+  narrows the KPI row, trend, and country map together; the region_split
+  chart at the bottom stays constant as the all-regions, all-time baseline.
 
 rows:
   - cols:
@@ -22,4 +22,5 @@ rows:
       - width: "60%"
         rows: [revenue_trend]
       - width: "40%"
-        rows: [country_sales_map]
+        rows: [region_split]
+  - country_sales_map

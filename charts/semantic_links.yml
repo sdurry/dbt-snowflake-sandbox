@@ -67,6 +67,24 @@ revenue_trend:
         chart's query; not separately linked
       unique_id: model.stephans_snow_sandbox.fct_orders
 
+region_split:
+  query: region_breakdown
+  semantic_refs:
+    - kind: metric
+      name: net_item_sales_amount
+      model: fct_orders
+      unique_id: metric.stephans_snow_sandbox.net_item_sales_amount
+      linked: true # this is the chart's plotted y value (net_sales)
+    - kind: metric
+      name: order_count
+      model: fct_orders
+      note: computed by the query but not plotted by this chart (no x/y/color encoding uses it) — not separately linked
+      unique_id: metric.stephans_snow_sandbox.order_count
+    - kind: model
+      name: dim_customers
+      note: source of the region categorical dimension — not separately linked
+      unique_id: model.stephans_snow_sandbox.dim_customers
+
 country_sales_map:
   query: country_breakdown
   semantic_refs:
