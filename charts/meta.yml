@@ -160,6 +160,9 @@ queries:
       country_code maps each nation to its ISO-3166-1 numeric code, which is
       the join key the world-countries/world-50m map geo sources expect
       (numeric TopoJSON ids, not ISO alpha codes -- see dct docs maps).
+      log_net_sales (LN(net_sales)) feeds the map's color scale -- dbt
+      charts has no log-scale option for a choropleth's color (only for
+      cartesian x/y axes), so the transform happens here in SQL instead.
     ignore: [WARN-FANOUT-RISK]  # verified: dim_customers.customer_key is unique, join is order:customer N:1
     sql: |
       SELECT
@@ -191,7 +194,8 @@ queries:
           WHEN 'UNITED STATES' THEN 840
           WHEN 'VIETNAM' THEN 704
         END AS country_code,
-        SUM(o.net_item_sales_amount) AS net_sales
+        SUM(o.net_item_sales_amount) AS net_sales,
+        LN(SUM(o.net_item_sales_amount)) AS log_net_sales
       FROM fct_orders o
       JOIN dim_customers c ON o.customer_key = c.customer_key
       WHERE 1=1
@@ -316,10 +320,13 @@ charts:
       World map of net sales by customer nation, filtered by region and time
       range (unlike region_split above, which stays an unfiltered baseline).
       lookup joins country_code (ISO-3166-1 numeric) to the world-countries
-      geo source.
+      geo source. Colors by log_net_sales rather than raw net_sales -- dbt
+      charts has no log-scale option on a choropleth's color channel, so
+      the LN() transform happens in country_breakdown's SQL instead; the
+      link: below still points at the real net_item_sales_amount metric.
     geo_source: world-countries
     lookup: country_code
-    value: net_sales
+    value: log_net_sales
     link: *net_item_sales_amount_link
     style:
       title:
