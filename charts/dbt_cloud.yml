@@ -1,15 +1,16 @@
 # dbt Cloud Explorer coordinates used to build the semantic-definition links
-# referenced from charts/semantic_links.yml and charts/dashboard.yml.
-#
-# Fill these in from dbt Cloud: Deploy > Environments > (your environment) —
-# the account_id, project_id, and environment_id are all in that URL.
+# referenced from charts/semantic_links.yml and charts/meta.yml.
 #
 # Explorer resource URL shape:
-#   https://cloud.getdbt.com/deploy/{account_id}/projects/{project_id}/environments/{environment_id}/details/{unique_id}
+#   https://{host}/explore/{account_id}/projects/{project_id}/environments/{environment_id}/details/{unique_id}
 # where {unique_id} is one of:
 #   model.stephans_snow_sandbox.<model_name>
 #   metric.stephans_snow_sandbox.<metric_name>
+#
+# host is account-specific (multi-cell/multi-region dbt Cloud), not the
+# generic cloud.getdbt.com — read it off any Explorer URL from this account.
 
-account_id: "<TODO>"
-project_id: "<TODO>"
-environment_id: "<TODO>"
+host: pp569.eu1.dbt.com
+account_id: "180"
+project_id: "3588"
+environment_id: "staging"

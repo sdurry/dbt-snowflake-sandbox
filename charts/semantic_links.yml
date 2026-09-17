@@ -13,8 +13,9 @@
 # / value actually plots. The other refs below (dimensions, source models)
 # aren't clickable on the board itself — this file is their only record.
 #
-# URL shape (account_id/project_id/environment_id come from charts/dbt_cloud.yml):
-#   https://cloud.getdbt.com/deploy/{account_id}/projects/{project_id}/environments/{environment_id}/details/{unique_id}
+# URL shape (host/account_id/project_id/environment_id come from charts/dbt_cloud.yml):
+#   https://{host}/explore/{account_id}/projects/{project_id}/environments/{environment_id}/details/{unique_id}
+# e.g. https://pp569.eu1.dbt.com/explore/180/projects/3588/environments/staging/details/{unique_id}
 #
 # unique_id patterns used below:
 #   model.stephans_snow_sandbox.<model_name>

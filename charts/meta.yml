@@ -82,7 +82,7 @@ charts:
     label: Net Sales
     value: net_sales
     notes: Headline net sales for the selected region.
-    link: &net_item_sales_amount_link "https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/details/metric.stephans_snow_sandbox.net_item_sales_amount"
+    link: &net_item_sales_amount_link "https://pp569.eu1.dbt.com/explore/180/projects/3588/environments/staging/details/metric.stephans_snow_sandbox.net_item_sales_amount"
     style:
       value:
         format: currency
@@ -93,7 +93,7 @@ charts:
     label: Orders
     value: order_count
     notes: Headline order count for the selected region.
-    link: &order_count_link "https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/details/metric.stephans_snow_sandbox.order_count"
+    link: &order_count_link "https://pp569.eu1.dbt.com/explore/180/projects/3588/environments/staging/details/metric.stephans_snow_sandbox.order_count"
 
   aov_kpi:
     type: kpi
