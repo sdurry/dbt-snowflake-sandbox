@@ -1,21 +1,27 @@
 # Theme: dbt_summit
 # On-brand palette for presenting these boards at dbt Summit — dbt orange
-# accent, charcoal ink, clean white canvas. Extends `stark` (not `clarity`)
-# so every color/font below is set explicitly rather than inherited from
-# clarity's steel-blue/serif editorial voice.
+# accent on a black canvas, warm off-white ink. Extends `stark` (not
+# `clarity`) so every color/font below is set explicitly rather than
+# inherited from clarity's steel-blue/serif editorial voice.
+#
+# Dark-canvas notes: `stark`'s own gray/border tokens assume a white board,
+# so every ink/border/grid value below is repointed for contrast against
+# black rather than just reused. The categorical palette's charcoal and
+# muted-rose swatches from the light build are re-lightened here — a dark
+# swatch on a black canvas is invisible, not just low-contrast.
 
 extends: stark
 style:
-  background: "#FFFFFF"
-  muted: "#F5F1EC"
+  background: "#000000"
+  muted: "#151517"          # secondary surface (table stripes, fills)
   accent: "#FF694A"          # dbt orange
 
   font:
     family: &font_sans '''Inter Variable'', Inter, system-ui, sans-serif'
-    color: &color_ink "#2C2A36"          # charcoal
+    color: &color_ink "#F5F1EC"          # warm off-white
 
   border:
-    color: "#E4DFD8"
+    color: "#2E2B28"
 
   title:
     # dbt Summit's own display face, falling back to the body sans if Bugrino
@@ -34,7 +40,7 @@ style:
       color: *color_ink
     subtitle:
       font:
-        color: "#6B6874"
+        color: "#9A948A"
 
   charts:
     # On-chart annotations — direct value/endpoint labels drawn on marks
@@ -48,33 +54,36 @@ style:
 
     color:
       categorical:
+        # Re-lightened from the light-canvas build: a dark swatch (the old
+        # charcoal/muted-rose) reads as invisible, not just low-contrast,
+        # against a black canvas.
         palette:
           - "#FF694A"   # dbt orange (primary)
-          - "#2C2A36"   # charcoal
-          - "#3B7A57"   # green
-          - "#F2A93B"   # gold
-          - "#5B6B8C"   # slate blue
-          - "#C65146"   # muted rose
+          - "#F5F1EC"   # off-white (was charcoal)
+          - "#5FBF8F"   # green (brightened)
+          - "#F2C14E"   # gold (brightened)
+          - "#8CA0C4"   # slate blue (brightened)
+          - "#E38080"   # rose (brightened)
         single_series_palette: ["#FF694A"]
 
     axis:
       line:
-        color: "#E4DFD8"
+        color: "#3A3630"
       ticks:
-        color: "#E4DFD8"
+        color: "#3A3630"
       grid:
-        color: "#EEE9E2"
+        color: "#201E1B"
       labels:
         font:
-          color: "#6B6874"
+          color: "#9A948A"
       title:
         font:
-          color: "#6B6874"
+          color: "#9A948A"
 
     legend:
       label:
         font:
-          color: "#6B6874"
+          color: "#9A948A"
       title:
         font:
           color: *color_ink
@@ -85,13 +94,15 @@ style:
           color: *color_ink
       label:
         font:
-          color: "#6B6874"
+          color: "#9A948A"
 
     tooltip:
-      background: "#2C2A36"
+      # Lifted a step off pure black so the tooltip still reads as a
+      # distinct panel rather than blending into the canvas.
+      background: "#1C1B19"
       label:
         font:
-          color: "#D8D5DE"
+          color: "#B8B2A8"
       value:
         font:
           color: "#FFFFFF"
