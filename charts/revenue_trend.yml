@@ -1,0 +1,9 @@
+title: "Revenue Trend (standalone preview)"
+notes: >
+  Standalone preview of the revenue_trend chart defined in charts/meta.yml —
+  now a stacked bar of monthly net sales broken down by order status. Edit
+  that chart or its monthly_status_breakdown query and re-render this file
+  (or charts/dashboard.yml) to see the change in isolation before it lands
+  on the full dashboard.
+
+chart_focus: revenue_trend
