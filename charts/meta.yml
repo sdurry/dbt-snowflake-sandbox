@@ -160,60 +160,85 @@ queries:
       country_code maps each nation to its ISO-3166-1 numeric code, which is
       the join key the world-countries/world-50m map geo sources expect
       (numeric TopoJSON ids, not ISO alpha codes -- see dct docs maps).
-      log_net_sales (LN(net_sales)) feeds the map's color scale -- dbt
-      charts has no log-scale option for a choropleth's color (only for
-      cartesian x/y axes), so the transform happens here in SQL instead.
+      sales_quantile buckets countries into 5 net-sales quintiles (NTILE)
+      and sales_quantile_label carries each bucket's real dollar range --
+      the map colors by this categorical label rather than a continuous
+      scale, since dbt charts has no log-scale option for a choropleth's
+      color and a continuous scale washes out this evenly-distributed data.
     ignore: [WARN-FANOUT-RISK]  # verified: dim_customers.customer_key is unique, join is order:customer N:1
     sql: |
+      WITH base AS (
+        SELECT
+          c.nation AS nation,
+          CASE c.nation
+            WHEN 'ALGERIA' THEN 12
+            WHEN 'ARGENTINA' THEN 32
+            WHEN 'BRAZIL' THEN 76
+            WHEN 'CANADA' THEN 124
+            WHEN 'CHINA' THEN 156
+            WHEN 'EGYPT' THEN 818
+            WHEN 'ETHIOPIA' THEN 231
+            WHEN 'FRANCE' THEN 250
+            WHEN 'GERMANY' THEN 276
+            WHEN 'INDIA' THEN 356
+            WHEN 'INDONESIA' THEN 360
+            WHEN 'IRAN' THEN 364
+            WHEN 'IRAQ' THEN 368
+            WHEN 'JAPAN' THEN 392
+            WHEN 'JORDAN' THEN 400
+            WHEN 'KENYA' THEN 404
+            WHEN 'MOROCCO' THEN 504
+            WHEN 'MOZAMBIQUE' THEN 508
+            WHEN 'PERU' THEN 604
+            WHEN 'ROMANIA' THEN 642
+            WHEN 'RUSSIA' THEN 643
+            WHEN 'SAUDI ARABIA' THEN 682
+            WHEN 'UNITED KINGDOM' THEN 826
+            WHEN 'UNITED STATES' THEN 840
+            WHEN 'VIETNAM' THEN 704
+          END AS country_code,
+          SUM(o.net_item_sales_amount) AS net_sales
+        FROM fct_orders o
+        JOIN dim_customers c ON o.customer_key = c.customer_key
+        WHERE 1=1
+        {% if region and region != 'All' %}
+          AND {{ filter('c.region', region) }}
+        {% endif %}
+        {% if time_range and time_range != 'All Time' %}
+          AND o.order_date >= (
+            SELECT CASE {{ time_range }}
+              WHEN 'Last 12 Months' THEN DATEADD('month', -12, MAX(order_date))
+              WHEN 'Last 24 Months' THEN DATEADD('month', -24, MAX(order_date))
+              WHEN 'Last 36 Months' THEN DATEADD('month', -36, MAX(order_date))
+            END
+            FROM fct_orders
+          )
+        {% endif %}
+        GROUP BY 1, 2
+      ),
+      bucketed AS (
+        SELECT
+          *,
+          NTILE(5) OVER (ORDER BY net_sales) AS sales_quantile
+        FROM base
+      ),
+      bucket_ranges AS (
+        SELECT
+          sales_quantile,
+          MIN(net_sales) AS bucket_min,
+          MAX(net_sales) AS bucket_max
+        FROM bucketed
+        GROUP BY 1
+      )
       SELECT
-        c.nation AS nation,
-        CASE c.nation
-          WHEN 'ALGERIA' THEN 12
-          WHEN 'ARGENTINA' THEN 32
-          WHEN 'BRAZIL' THEN 76
-          WHEN 'CANADA' THEN 124
-          WHEN 'CHINA' THEN 156
-          WHEN 'EGYPT' THEN 818
-          WHEN 'ETHIOPIA' THEN 231
-          WHEN 'FRANCE' THEN 250
-          WHEN 'GERMANY' THEN 276
-          WHEN 'INDIA' THEN 356
-          WHEN 'INDONESIA' THEN 360
-          WHEN 'IRAN' THEN 364
-          WHEN 'IRAQ' THEN 368
-          WHEN 'JAPAN' THEN 392
-          WHEN 'JORDAN' THEN 400
-          WHEN 'KENYA' THEN 404
-          WHEN 'MOROCCO' THEN 504
-          WHEN 'MOZAMBIQUE' THEN 508
-          WHEN 'PERU' THEN 604
-          WHEN 'ROMANIA' THEN 642
-          WHEN 'RUSSIA' THEN 643
-          WHEN 'SAUDI ARABIA' THEN 682
-          WHEN 'UNITED KINGDOM' THEN 826
-          WHEN 'UNITED STATES' THEN 840
-          WHEN 'VIETNAM' THEN 704
-        END AS country_code,
-        SUM(o.net_item_sales_amount) AS net_sales,
-        LN(SUM(o.net_item_sales_amount)) AS log_net_sales
-      FROM fct_orders o
-      JOIN dim_customers c ON o.customer_key = c.customer_key
-      WHERE 1=1
-      {% if region and region != 'All' %}
-        AND {{ filter('c.region', region) }}
-      {% endif %}
-      {% if time_range and time_range != 'All Time' %}
-        AND o.order_date >= (
-          SELECT CASE {{ time_range }}
-            WHEN 'Last 12 Months' THEN DATEADD('month', -12, MAX(order_date))
-            WHEN 'Last 24 Months' THEN DATEADD('month', -24, MAX(order_date))
-            WHEN 'Last 36 Months' THEN DATEADD('month', -36, MAX(order_date))
-          END
-          FROM fct_orders
-        )
-      {% endif %}
-      GROUP BY 1, 2
-      ORDER BY 1
+        b.nation,
+        b.country_code,
+        b.net_sales,
+        b.sales_quantile,
+        'Q' || b.sales_quantile || ': $' || TO_VARCHAR(ROUND(r.bucket_min / 1000000, 1)) || 'M–$' || TO_VARCHAR(ROUND(r.bucket_max / 1000000, 1)) || 'M' AS sales_quantile_label
+      FROM bucketed b
+      JOIN bucket_ranges r ON b.sales_quantile = r.sales_quantile
+      ORDER BY b.sales_quantile, b.nation
 
 charts:
   revenue_kpi:
@@ -320,21 +345,21 @@ charts:
       World map of net sales by customer nation, filtered by region and time
       range (unlike region_split above, which stays an unfiltered baseline).
       lookup joins country_code (ISO-3166-1 numeric) to the world-countries
-      geo source. Colors by log_net_sales rather than raw net_sales -- dbt
-      charts has no log-scale option on a choropleth's color channel, so
-      the LN() transform happens in country_breakdown's SQL instead; the
-      link: below still points at the real net_item_sales_amount metric.
+      geo source. Colors by sales_quantile_label (5 net-sales quintiles,
+      categorical) rather than a continuous scale on net_sales, since this
+      data is evenly distributed and washes out on a continuous ramp --
+      quantile buckets give real visual separation, and the legend reads
+      each bucket's actual dollar range. GeoshapeChartStyle.color rejects a
+      `categorical:` style arm (confirmed by ERR-EXTRA-FIELD on
+      style.color.categorical), so this falls back to the theme's default
+      categorical palette rather than an ordered white-to-orange ramp --
+      colors distinguish buckets but don't read as low-to-high intensity.
+      The link: below still points at the real net_item_sales_amount metric.
     geo_source: world-countries
     lookup: country_code
-    value: log_net_sales
+    color: sales_quantile_label
     link: *net_item_sales_amount_link
     style:
       title:
         font:
           family: '''Inter Variable'', Inter, system-ui, sans-serif'
-      color:
-        gradient:
-          # dbt Summit has no sequential palette of its own (only the
-          # categorical one + the "#FF694A" accent) -- ramp from white up to
-          # the theme's accent orange.
-          palette: ["#F5F1EC", "#FF694A"]
