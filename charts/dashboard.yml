@@ -7,18 +7,8 @@ notes: >
 
 rows:
   - cols: [revenue_kpi, orders_kpi, aov_kpi]
-  - text: |
-      📎 Semantic definitions: [net_item_sales_amount](https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/details/metric.stephans_snow_sandbox.net_item_sales_amount) · [order_count](https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/details/metric.stephans_snow_sandbox.order_count) · avg_order_value (no metric declared yet — see charts/semantic_links.yml)
   - cols:
       - width: "60%"
-        rows:
-          - revenue_trend
-          - text: |
-              📎 Semantic definitions: [net_item_sales_amount](https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/details/metric.stephans_snow_sandbox.net_item_sales_amount) · [fct_orders](https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/details/model.stephans_snow_sandbox.fct_orders)
-      - rows:
-          - status_split
-          - text: |
-              📎 Semantic definitions: [order_count](https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/details/metric.stephans_snow_sandbox.order_count) · [net_item_sales_amount](https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/details/metric.stephans_snow_sandbox.net_item_sales_amount) · [fct_orders](https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/details/model.stephans_snow_sandbox.fct_orders)
+        rows: [revenue_trend]
+      - rows: [status_split]
   - region_split
-  - text: |
-      📎 Semantic definitions: [order_count](https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/details/metric.stephans_snow_sandbox.order_count) · [net_item_sales_amount](https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/details/metric.stephans_snow_sandbox.net_item_sales_amount) · [dim_customers](https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/details/model.stephans_snow_sandbox.dim_customers)

@@ -103,19 +103,28 @@ raw table/column names — they don't `ref()` a model or query the Semantic
 Layer (dbt charts doesn't support querying the SL by metric name yet). To keep
 a chart traceable back to the metric/model it's meant to reproduce:
 
-- `charts/semantic_links.yml` maps each chart to the metric(s)/model(s) it
-  draws on and their dbt Cloud Explorer `unique_id`. `charts/dbt_cloud.yml`
-  holds the account/project/environment IDs used to build those URLs.
-- Each chart in `charts/dashboard.yml` has a matching markdown `text:` block
-  (see dct's [content blocks](https://docs.dbtcharts.com/boards/content/))
-  rendering those links, using the URL shape documented in
-  `charts/dbt_cloud.yml`.
+- `charts/semantic_links.yml` maps each chart to the metric(s)/model(s)/
+  dimension(s) it draws on and their dbt Cloud Explorer `unique_id`.
+  `charts/dbt_cloud.yml` holds the account/project/environment IDs used to
+  build those URLs.
+- The metric a chart actually plots (its `linked: true` entry in
+  `semantic_links.yml`) is wired up as that chart's own `link:` field in
+  `charts/meta.yml` — dct's cell-level hyperlink config (see `dct docs
+  reference -s link`). Clicking the chart's rendered numbers opens the
+  metric's Explorer page directly; no separate text/markdown block is used.
+  A `link:` is a single URL per chart, so charts that draw on more than one
+  semantic object (e.g. a plotted metric plus the model behind an axis
+  dimension) only link the plotted one — the rest stay recorded in
+  `semantic_links.yml` but aren't independently clickable on the board.
+  Repeated URLs are written once as a YAML anchor (`&name`) in `meta.yml` and
+  reused via alias (`*name`) rather than copy-pasted per chart.
 - **This is manually maintained, not generated or enforced.** When you add or
-  change a chart's SQL, or rename/remove a metric it depends on, update both
-  `charts/semantic_links.yml` and the `text:` block in `dashboard.yml` in the
-  same edit — nothing else will catch the drift. If a chart aggregates a
-  column with no declared metric yet, record that explicitly (see the
-  `aov_kpi` entry in `semantic_links.yml`) instead of inventing a link.
+  change a chart's SQL, change what it plots, or rename/remove a metric it
+  depends on, update both `charts/semantic_links.yml` and the chart's `link:`
+  field in `meta.yml` in the same edit — nothing else will catch the drift.
+  If a chart aggregates a column with no declared metric yet, record that
+  explicitly (see the `aov_kpi` entry in `semantic_links.yml`) and leave its
+  `link:` field off rather than inventing one.
 
 ## Working with the warehouse (use the MCP server)
 

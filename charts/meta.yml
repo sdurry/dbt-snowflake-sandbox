@@ -82,6 +82,7 @@ charts:
     label: Net Sales
     value: net_sales
     notes: Headline net sales for the selected region.
+    link: &net_item_sales_amount_link "https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/details/metric.stephans_snow_sandbox.net_item_sales_amount"
     style:
       value:
         format: currency
@@ -92,13 +93,17 @@ charts:
     label: Orders
     value: order_count
     notes: Headline order count for the selected region.
+    link: &order_count_link "https://cloud.getdbt.com/deploy/<account_id>/projects/<project_id>/environments/<environment_id>/details/metric.stephans_snow_sandbox.order_count"
 
   aov_kpi:
     type: kpi
     query: order_kpis
     label: Avg Order Value
     value: avg_order_value
-    notes: Net sales divided by order count for the selected region.
+    notes: >
+      Net sales divided by order count for the selected region. No standalone
+      metric is declared for this ratio in fct_orders.yml yet, so there's
+      nothing to link to — see the aov_kpi entry in charts/semantic_links.yml.
     style:
       value:
         format: currency_full
@@ -110,6 +115,7 @@ charts:
     notes: Monthly net sales trend for the selected region.
     x: month
     y: net_sales
+    link: *net_item_sales_amount_link
     style:
       axis_y:
         labels:
@@ -123,6 +129,7 @@ charts:
     x: status
     y: net_sales
     color: status
+    link: *net_item_sales_amount_link
     style:
       orientation: horizontal
       axis_y:
@@ -136,6 +143,7 @@ charts:
     notes: Net sales split by customer region across all orders, unaffected by the region filter.
     x: region
     y: net_sales
+    link: *net_item_sales_amount_link
     style:
       axis_y:
         labels:
