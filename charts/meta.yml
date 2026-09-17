@@ -298,4 +298,8 @@ charts:
           family: '''Inter Variable'', Inter, system-ui, sans-serif'
       color:
         gradient:
-          palette: blues
+          # dbt Summit has no sequential palette of its own (only the
+          # categorical one + the "#FF694A" accent) -- ramp from a dark,
+          # warm low-end (still visible against the black canvas) up to
+          # the theme's accent orange itself.
+          palette: ["#2A1710", "#FF694A"]
