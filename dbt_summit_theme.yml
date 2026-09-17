@@ -108,3 +108,11 @@ style:
           color: "#FFFFFF"
       border:
         color: "#FF694A"
+
+  # Variable strip (Region / Time Range controls). Unset here, this falls
+  # back to stark's own gray ink token — near-invisible against black.
+  variables:
+    font:
+      color: *color_ink
+    border:
+      color: "#3A3630"
