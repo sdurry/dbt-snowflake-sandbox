@@ -1,8 +1,0 @@
-title: "Region Split (standalone preview)"
-notes: >
-  Standalone preview of the region_split chart defined in charts/meta.yml.
-  Edit that chart or its region_breakdown query and re-render this file (or
-  charts/dashboard.yml) to see the change in isolation before it lands on
-  the full dashboard.
-
-chart_focus: region_split

@@ -52,7 +52,7 @@ aov_kpi:
       # No metric/model unique_id yet, so no link: field on aov_kpi either.
 
 revenue_trend:
-  query: monthly_revenue
+  query: monthly_status_breakdown
   semantic_refs:
     - kind: metric
       name: net_item_sales_amount
@@ -61,41 +61,21 @@ revenue_trend:
       linked: true # this is the chart's plotted y value (net_sales)
     - kind: model
       name: fct_orders
-      note: source of the order_date time dimension (month) — not separately linked
+      note: >
+        source of the order_date time dimension (month) and the status_code
+        categorical dimension (color) — merged in from the old status_split
+        chart's query; not separately linked
       unique_id: model.stephans_snow_sandbox.fct_orders
 
-status_split:
-  query: status_breakdown
+country_sales_map:
+  query: country_breakdown
   semantic_refs:
     - kind: metric
       name: net_item_sales_amount
       model: fct_orders
       unique_id: metric.stephans_snow_sandbox.net_item_sales_amount
-      linked: true # this is the chart's plotted y value (net_sales)
-    - kind: metric
-      name: order_count
-      model: fct_orders
-      note: computed by the query but not plotted by this chart (no x/y/color encoding uses it) — not separately linked
-      unique_id: metric.stephans_snow_sandbox.order_count
-    - kind: model
-      name: fct_orders
-      note: source of the status_code categorical dimension — not separately linked
-      unique_id: model.stephans_snow_sandbox.fct_orders
-
-region_split:
-  query: region_breakdown
-  semantic_refs:
-    - kind: metric
-      name: net_item_sales_amount
-      model: fct_orders
-      unique_id: metric.stephans_snow_sandbox.net_item_sales_amount
-      linked: true # this is the chart's plotted y value (net_sales)
-    - kind: metric
-      name: order_count
-      model: fct_orders
-      note: computed by the query but not plotted by this chart (no x/y/color encoding uses it) — not separately linked
-      unique_id: metric.stephans_snow_sandbox.order_count
+      linked: true # this is the chart's plotted value (net_sales, choropleth fill)
     - kind: model
       name: dim_customers
-      note: source of the region categorical dimension — not separately linked
+      note: source of the nation dimension and its ISO-3166-1 numeric country_code (the map's lookup key) — not separately linked
       unique_id: model.stephans_snow_sandbox.dim_customers
