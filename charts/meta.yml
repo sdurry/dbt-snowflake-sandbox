@@ -39,8 +39,9 @@ queries:
     notes: >
       Single-row headline for the KPI row — net sales, order count, average
       order value, filtered by region and time range — plus trailing/prior
-      12-month net sales (region-filtered only, independent of time_range)
-      and their pct change, powering the Net Sales KPI's trend indicator.
+      12-month net sales and order counts (region-filtered only, independent
+      of time_range) and their pct change, powering the Net Sales and Orders
+      KPIs' trend indicators.
     sql: |
       WITH agg AS (
         SELECT
@@ -65,7 +66,26 @@ queries:
             {% if region and region != 'All' %}
               AND {{ filter('c3.region', region) }}
             {% endif %}
-          ) AS prior_12mo_net_sales
+          ) AS prior_12mo_net_sales,
+          (
+            SELECT COUNT(*)
+            FROM fct_orders o4
+            JOIN dim_customers c4 ON o4.customer_key = c4.customer_key
+            WHERE o4.order_date >= DATEADD('month', -12, (SELECT MAX(order_date) FROM fct_orders))
+            {% if region and region != 'All' %}
+              AND {{ filter('c4.region', region) }}
+            {% endif %}
+          ) AS trailing_12mo_order_count,
+          (
+            SELECT COUNT(*)
+            FROM fct_orders o5
+            JOIN dim_customers c5 ON o5.customer_key = c5.customer_key
+            WHERE o5.order_date < DATEADD('month', -12, (SELECT MAX(order_date) FROM fct_orders))
+              AND o5.order_date >= DATEADD('month', -24, (SELECT MAX(order_date) FROM fct_orders))
+            {% if region and region != 'All' %}
+              AND {{ filter('c5.region', region) }}
+            {% endif %}
+          ) AS prior_12mo_order_count
         FROM fct_orders o
         JOIN dim_customers c ON o.customer_key = c.customer_key
         WHERE 1=1
@@ -85,7 +105,8 @@ queries:
       )
       SELECT
         *,
-        trailing_12mo_net_sales / NULLIF(prior_12mo_net_sales, 0) - 1 AS net_sales_trend_pct
+        trailing_12mo_net_sales / NULLIF(prior_12mo_net_sales, 0) - 1 AS net_sales_trend_pct,
+        trailing_12mo_order_count / NULLIF(prior_12mo_order_count, 0) - 1 AS order_count_trend_pct
       FROM agg
 
   monthly_status_breakdown:
@@ -221,8 +242,16 @@ charts:
     query: order_kpis
     label: Orders
     value: order_count
-    notes: Headline order count for the selected region.
+    notes: >
+      Headline order count for the selected region, with a trend indicator
+      comparing trailing 12 months to the prior 12 months (region-filtered
+      only — independent of the time_range selector).
     link: &order_count_link "https://pp569.eu1.dbt.com/explore/180/projects/3588/environments/staging/details/metric.stephans_snow_sandbox.order_count"
+    support:
+      value: order_count_trend_pct
+      label: "vs. prior 12 months"
+      format: percent_delta
+      tone: info
 
   aov_kpi:
     type: kpi
@@ -299,7 +328,6 @@ charts:
       color:
         gradient:
           # dbt Summit has no sequential palette of its own (only the
-          # categorical one + the "#FF694A" accent) -- ramp from a dark,
-          # warm low-end (still visible against the black canvas) up to
-          # the theme's accent orange itself.
-          palette: ["#2A1710", "#FF694A"]
+          # categorical one + the "#FF694A" accent) -- ramp from white up to
+          # the theme's accent orange.
+          palette: ["#F5F1EC", "#FF694A"]
