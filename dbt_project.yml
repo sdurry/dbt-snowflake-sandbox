@@ -4,6 +4,9 @@ name: stephans_snow_sandbox
 version: 2.0
 profile: tpch
 
+info_schema:
+  version: 1
+
 dbt-cloud:
   project-id: 3588
   defer-env-id: '6605'
@@ -22,6 +25,8 @@ snapshot-paths:
   - snapshots
 function-paths:
   - functions
+check-paths:
+  - checks
 
 clean-targets:
   - target
