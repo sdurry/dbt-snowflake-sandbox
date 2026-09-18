@@ -3,7 +3,7 @@ unit_tests:
     description: >
       Check my base price calculation
     config:
-      compute: local
+      compute: local #requires export DBT_ENGINE_EXPERIMENTAL_LOCAL_UNIT_TESTS=true
     model: order_items # name of the model I'm unit testing
     given: # the mock data for your inputs
       - input: ref('stg_tpch_line_items')
