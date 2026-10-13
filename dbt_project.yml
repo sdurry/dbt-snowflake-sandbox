@@ -36,6 +36,9 @@ on-run-start:
   - alter warehouse transforming set warehouse_size=small;
 on-run-end:
   - alter warehouse transforming set warehouse_size=xsmall;
+flags:
+  manage_state: true
+
 vars:
   start_date: '1999-01-01'
   test: 'false'
@@ -56,10 +59,14 @@ models:
     staging:
       +group: data_engineering
       +materialized: view
+      +state:
+        lag_tolerance: 0s
     marts:
       +group: bi_team
       core:
         +materialized: table
+        +state:
+          lag_tolerance: 24h
 snapshots:
   stephans_snow_sandbox:
     +schema: "{% if target.name == 'prod' %}snaps{% else %}{{ target.schema }}{% endif %}"
