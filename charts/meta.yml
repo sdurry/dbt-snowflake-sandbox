@@ -1,3 +1,4 @@
+theme: "clarity"
 # Shared defaults for every board under charts/ — a *partial board* with no
 # layout of its own. `dashboard.yml` and each per-chart preview file below
 # inherit this source, variable, and every query/chart defined here. Edit a
@@ -296,29 +297,24 @@ charts:
         format: currency_full
 
   revenue_trend:
-    type: bar
+    type: line
     query: monthly_status_breakdown
     title: Monthly Net Sales by Status
     notes: >
-      Monthly net sales for the selected region and time range, stacked by
-      order status. Replaces the old separate status-split chart, which
-      collapsed to a single status once the time range narrowed enough.
+      Monthly net sales for the selected region and time range, with one line
+      per order status.
     x: month
     y: net_sales
     color: status
     link: *net_item_sales_amount_link
     style:
-      orientation: vertical
-      stack: zero
+      number_format: currency
       title:
         # dbt_summit_theme sets the board title (Bugrino); chart-card titles
         # always inherit that same family from the engine, so pin the body
         # sans here per-chart to keep chart titles on Inter.
         font:
           family: '''Inter Variable'', Inter, system-ui, sans-serif'
-      axis_y:
-        labels:
-          format: "$,.3~s"
 
   region_split:
     type: bar
