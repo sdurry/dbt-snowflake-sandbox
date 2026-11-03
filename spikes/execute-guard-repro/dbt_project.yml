@@ -1,0 +1,11 @@
+name: execute_repro
+version: '1.0.0'
+config-version: 2
+profile: repro  # update to match your profiles.yml, e.g. tpch
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+
+models:
+  execute_repro:
+    +materialized: view
